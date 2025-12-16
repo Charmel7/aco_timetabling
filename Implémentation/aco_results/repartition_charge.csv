@@ -1,0 +1,8 @@
+Salle,Capacite,Type_Salle,Nb_Cours_Affectes,Taches_IDs,Gaspillage_Moyen
+TD-1,30,TD,7,GMM-I1_Mod._Stoch._I; GMM-I1_Opt._Dis._I; GMM-I3_Mod._Stoch._III; GMM-I2_Alg._Lin._II; GMM-I2_Opt._Dis._II; GEP-I2_Inst._II; GMM-I3_Alg._Lin._III,5.71
+TD-2,30,TD,8,GEP-I1_Chim._Proc._I; GMM-I1_Anal._Fonc._I; GEP-I3_Én._Ren._III; GMM-I3_Anal._Fonc._III; GMM-I3_Cal._Sci._III; GEP-I3_Thermo._App._III; GMM-I2_Mod._Stoch._II; GEP-I3_Chim._Proc._III,6.88
+TD-3,30,TD,8,GEP-I1_Inst._I; GEP-I2_Chim._Proc._II; GMM-I1_Alg._Lin._I; GMM-I3_Opt._Dis._III; GEP-I3_Inst._III; GMM-I2_Cal._Sci._II; GEP-I3_Trans._Chal._III; GMM-I2_Anal._Fonc._II,6.62
+TD-4,30,TD,7,GEP-I1_Én._Ren._I; GEP-I1_Thermo._App._I; GEP-I2_Thermo._App._II; GEP-I2_Én._Ren._II; GMM-I1_Cal._Sci._I; GEP-I1_Trans._Chal._I; GEP-I2_Trans._Chal._II,6.00
+SALLE-60,60,SC,5,ENSTP-L3_Phys_III; ENSTP-L3_Maths_III; ENSTP-L3_Urbanisme; ENSTP-L3_Projet_Construction; ENSTP-L3_RDM_III,5.00
+AMPHI-100,100,AMPHI,5,ENSTP-L1_RDM_I; ENSTP-L1_Maths_I; ENSTP-L1_DI_I; ENSTP-L1_Topo_I; ENSTP-L1_Phys_I,25.00
+AMPHI-200,200,AMPHI,0,,0.00

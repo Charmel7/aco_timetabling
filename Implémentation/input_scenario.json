@@ -1,0 +1,38 @@
+{
+    "DESCRIPTION": "Scénario du Campus de Sogbo-Aliho : 8 classes, 40 tâches, 7 salles, 84 slots.",
+
+    "ACO_PARAMS": {
+        "alpha": 1,         
+        "beta": 5,          
+        "rho": 0.01,        
+        "Q": 100,           
+        "tau_max": 6,       
+        "tau_min": 0.01,    
+        "w1": 1000,         
+        "w2": 1,            
+        "w3": 0.1,          
+        "m": 30,            
+        "MaxIterations": 150
+    },
+
+    "SALLES": {
+        "TD-1": [30, "TD"], 
+        "TD-2": [30, "TD"], 
+        "TD-3": [30, "TD"], 
+        "TD-4": [30, "TD"],
+        "SALLE-60": [60, "SC"],  
+        "AMPHI-100": [100, "AMPHI"], 
+        "AMPHI-200": [200, "AMPHI"]
+    },
+
+    "CLASSES_DETAILS": {
+        "ENSTP-L1": [75, ["Maths I", "Phys I", "RDM I", "Topo I", "DI I"]],
+        "ENSTP-L3": [55, ["Maths III", "Phys III", "RDM III", "Projet Construction", "Urbanisme"]],
+        "GMM-I1": [27, ["Anal. Fonc. I", "Alg. Lin. I", "Mod. Stoch. I", "Opt. Dis. I", "Cal. Sci. I"]],
+        "GMM-I2": [25, ["Anal. Fonc. II", "Alg. Lin. II", "Mod. Stoch. II", "Opt. Dis. II", "Cal. Sci. II"]],
+        "GMM-I3": [23, ["Anal. Fonc. III", "Alg. Lin. III", "Mod. Stoch. III", "Opt. Dis. III", "Cal. Sci. III"]],
+        "GEP-I1": [27, ["Thermo. App. I", "Trans. Chal. I", "Én. Ren. I", "Chim. Proc. I", "Inst. I"]],
+        "GEP-I2": [20, ["Thermo. App. II", "Trans. Chal. II", "Én. Ren. II", "Chim. Proc. II", "Inst. II"]],
+        "GEP-I3": [20, ["Thermo. App. III", "Trans. Chal. III", "Én. Ren. III", "Chim. Proc. III", "Inst. III"]]
+    }
+}

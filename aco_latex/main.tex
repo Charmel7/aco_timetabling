@@ -1,0 +1,1763 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage[table]{xcolor}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{titlesec}
+\usepackage{sectsty}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usetikzlibrary{positioning, calc}
+
+% ---- Palette institutionnelle ----
+\definecolor{unstimblue}{RGB}{20,45,90}
+\definecolor{ensgmmred}{RGB}{170,30,45}
+\definecolor{neutral}{RGB}{90,90,90}
+
+\titleformat{\chapter}
+  {\normalfont\bfseries\Huge\color{unstimblue}}
+  {\fboxsep=0pt%
+   \color{ensgmmred}\rule{1.2cm}{1.2cm}%
+   \hspace{-1.2cm}%
+   \hbox to 1.2cm{\hss\color{white}\thechapter\hss}}
+  {1.2em}
+  {}
+  [\vspace{0.3cm}\color{ensgmmred}\rule{0.4\linewidth}{0.6mm}]
+
+
+\titleformat{\section}
+  {\Large\bfseries\color{unstimblue}}
+  {\thesection}
+  {1em}
+  {}
+
+\titleformat{\subsection}
+  {\large\bfseries\color{neutral}}
+  {\thesubsection}
+  {1em}
+  {}
+
+\titlespacing*{\chapter}{0pt}{-10pt}{30pt}
+\titlespacing*{\section}{0pt}{18pt}{10pt}
+\titlespacing*{\subsection}{0pt}{12pt}{6pt}
+
+\setlist[itemize]{itemsep=6pt, topsep=6pt}
+\setlist[enumerate]{itemsep=6pt, topsep=6pt}
+
+\renewcommand{\arraystretch}{1.3}
+%
+\captionsetup{
+  font=small,
+  labelfont=bf,
+  labelsep=space
+}
+
+\geometry{left=2.5cm,right=2.5cm,top=2cm,bottom=2cm}
+\onehalfspacing
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyfoot[C]{\thepage}
+
+\begin{document}
+% =====================================
+% PAGE DE GARDE 
+% =====================================
+
+\begin{titlepage}
+\newgeometry{top=2.2cm,bottom=2.5cm,left=2.8cm,right=2.8cm}
+\thispagestyle{empty}
+
+
+% ---- Bande supérieure ----
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[unstimblue] (current page.north west)
+    rectangle ([yshift=-1.1cm]current page.north east);
+\end{tikzpicture}
+
+% ---- Logos ----
+\begin{tikzpicture}[remember picture,overlay]
+\node[anchor=north west,xshift=1.2cm,yshift=-1cm]
+at (current page.north west)
+{\includegraphics[height=3cm]{images/logo_unstim.png}};
+
+\node[anchor=north east,xshift=-1.2cm,yshift=-1cm]
+at (current page.north east)
+{\includegraphics[height=3cm]{images/logo_ensgmm.png}};
+\end{tikzpicture}
+
+\vspace{1.8cm}
+
+% ---- Institutions ----
+\begin{center}
+{\large\bfseries UNIVERSITÉ NATIONALE DES SCIENCES, TECHNOLOGIES,}\\[0.cm]
+{\large\bfseries INGÉNIERIE ET MATHÉMATIQUES}\\
+{\large\color{neutral}(UNSTIM)}\\[0.8cm]
+
+{\large\bfseries ÉCOLE NATIONALE SUPÉRIEURE DE GÉNIE}\\
+{\large\bfseries MATHÉMATIQUE ET MODÉLISATION}\\
+{\large\color{neutral}(ENSGMM)}
+\end{center}
+
+\vspace{0.7cm}
+
+% ---- Titre ----
+\begin{center}
+{\color{ensgmmred}\rule{0.55\linewidth}{0.8mm}}\\[0.2cm]
+
+{\Large\bfseries\color{unstimblue}
+Ant Colony Optimization
+}\\
+
+{\Large\color{neutral}
+Application à la gestion des groupes pédagogiques\\
+sur le campus de Sogbo-Aliho
+}\\[0.2cm]
+
+{\color{ensgmmred}\rule{0.55\linewidth}{0.8mm}}
+\end{center}
+
+\vspace{1.6cm}
+
+% ---- Fourmi ----
+\begin{center}
+\includegraphics[width=4cm]{images/ant.png}
+\end{center}
+
+\vspace{1.8cm}
+
+% ---- Auteurs / Encadreur ----
+\begin{minipage}{0.48\textwidth}
+\textbf{Présenté par\,:\!}\\[0.4cm]
+AFFOUKOU Prosper\\
+AKANNI Eskil\\
+ADANLAO Laurinda\\
+ASSOU Marguerite\\
+DOHOU Alexis
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+\raggedleft
+\textbf{Encadré par\,:\!}\\[0.2cm]
+Dr DANDOGBESSI Bruno
+\end{minipage}
+
+\vfill
+\vspace{0.2cm}
+% ---- Bas de page ----
+\begin{center}
+\textbf{Cours\,:\! Optimisation Continue et Discrète}\\
+\textbf{Année académique\,:\! 2025--2026}
+\end{center}
+
+\restoregeometry
+\end{titlepage}
+
+
+
+% Table des matières
+\tableofcontents
+\newpage
+
+% Chapitre 1 : Introduction Contextuelle
+\chapter{Introduction Contextuelle}
+
+\section{Contexte du problème}
+
+La gestion efficace des ressources pédagogiques constitue un défi majeur pour les établissements d'enseignement supérieur. Sur le campus de Sogbo-Aliho, comme dans de nombreuses institutions académiques, l'affectation optimale des classes aux salles disponibles représente une tâche complexe qui influence directement la qualité de l'enseignement et l'utilisation rationnelle des infrastructures.
+
+La problématique peut être formulée comme suit : étant donné un ensemble de classes avec leurs emplois du temps respectifs et un ensemble de salles avec des capacités limitées, comment affecter les classes aux salles de manière à minimiser les conflits d'emploi du temps tout en respectant les contraintes de capacité et de compatibilité ?
+
+Ce problème appartient à la classe des \textbf{problèmes de timetabling universitaire} (University Timetabling Problem), largement étudié dans la littérature \cite{socha2002, matijas2010}.
+
+\section{Nature du problème d'optimisation}
+
+Le problème d'affectation de classes à des salles appartient à la classe des \textbf{problèmes d'optimisation combinatoire NP-difficiles}. Plus précisément, il s'agit d'un problème avec les caractéristiques suivantes :
+
+\begin{itemize}
+    \item \textbf{Variables de décision discrètes}\,: L'affectation d'une classe à une salle est une décision binaire (0 ou 1)
+    \item \textbf{Fonction objectif continue}\,: Le nombre de conflits d'emploi du temps est une valeur entière, mais peut être normalisée en une valeur continue
+    \item \textbf{Contraintes multiples}\,: Contraintes de capacité, de compatibilité, et de non-chevauchement temporel
+    \item \textbf{Espace de recherche exponentiel}\,: Pour $n$ classes et $k$ salles, l'espace des solutions possibles est de l'ordre de $k^n$
+\end{itemize}
+
+\section{Pourquoi l'algorithme de colonies de fourmis~(ACO)\,?}
+
+L'Ant Colony Optimization (ACO) est particulièrement adapté à notre problématique pour plusieurs raisons fondamentales~:
+
+\subsection{Adéquation avec les problèmes de timetabling}
+
+L'ACO a démontré son efficacité sur divers problèmes de planification universitaire \cite{socha2002, matijas2010}. Socha et al. ont montré d'excellents résultats pour la construction d'emplois du temps universitaires en utilisant MAX-MIN Ant System.
+
+\subsection{Flexibilité et adaptabilité}
+
+Contrairement aux méthodes exactes qui deviennent impraticables pour des instances de grande taille, l'ACO offre une approche métaheuristique capable de :
+
+\begin{itemize}
+    \item S'adapter à différentes fonctions objectif et contraintes
+    \item Intégrer facilement de nouvelles contraintes (capacité, compatibilité, préférences)
+    \item Fournir des solutions de bonne qualité en temps raisonnable
+\end{itemize}
+
+\subsection{Équilibre exploitation-exploration}
+
+Le mécanisme de phéromones artificielles de l'ACO permet un équilibre naturel entre :
+\begin{itemize}
+    \item \textbf{L'exploitation} : Renforcement des bonnes affectations trouvées
+    \item \textbf{L'exploration} : Recherche de nouvelles configurations prometteuses
+\end{itemize}
+
+Cette propriété est cruciale pour éviter la convergence prématurée vers des optimums locaux \cite{stutzle2000}.
+
+\subsection{Gestion des contraintes complexes}
+
+L'ACO gère naturellement les contraintes hard (qui ne peuvent être violées) et soft (préférences) en les intégrant dans la fonction heuristique et la fonction objectif.
+
+\section{Objectifs de l'étude}
+
+Ce travail vise à~:
+\begin{enumerate}
+    \item Développer un modèle mathématique formel du problème d'affectation de classes à des salles
+    \item Adapter l'algorithme ACO à ce contexte spécifique de timetabling
+    \item Implémenter une solution fonctionnelle en Python
+    \item Appliquer l'algorithme à un cas concret du campus de Sogbo-Aliho
+    \item Évaluer les performances et analyser les résultats
+    \item Comparer avec d'autres méthodes d'optimisation
+\end{enumerate}
+
+% Chapitre 2 : Principe Biologique
+\chapter{Principe Biologique des Fourmis}
+
+\section{Le comportement naturel des fourmis}
+
+L'algorithme ACO s'inspire directement du comportement de recherche de nourriture (\textit{foraging}) observé chez certaines espèces de fourmis. Ce comportement remarquable illustre un principe fondamental d'intelligence collective : comment des agents simples, sans coordination centralisée, peuvent résoudre collectivement des problèmes complexes.
+
+\subsection{La découverte de nourriture}
+
+Lorsqu'une fourmi découvre une source de nourriture, elle retourne à la colonie en déposant sur son chemin une substance chimique appelée \textbf{phéromone} \cite{wilson1962,goss1989}. Cette phéromone est sécrétée par des glandes exocrines situées dans l'abdomen postérieur de la fourmi \cite{morgan2009}.
+
+\subsection{Le mécanisme de renforcement}
+
+Les fourmis qui suivent utilisent leur perception chimique pour détecter les traces de phéromone. Elles ont tendance à suivre préférentiellement les chemins où la concentration de phéromone est plus élevée. Lorsqu'elles trouvent la nourriture à leur tour, elles renforcent le chemin en y déposant également de la phéromone \cite{deneubourg1990}.
+
+Ce processus crée une \textbf{boucle de rétroaction positive}\,: plus un chemin est emprunté, plus il devient attractif pour les autres fourmis \cite{bonabeau2000}.
+
+\section{L'expérience du pont double}
+
+\subsection{Protocole expérimental}
+
+Une expérience classique réalisée par Goss et al.~(1989) \cite{goss1989} a démontré la capacité des fourmis à trouver le chemin le plus court. Le dispositif expérimental, appelé ``pont double'', consiste en~:
+\begin{itemize}
+    \item Une colonie de fourmis séparée d'une source de nourriture
+    \item Deux branches de longueurs différentes reliant la colonie à la nourriture.
+
+\end{itemize}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{images/demonstrates-the-result-of-an-experiment-performed-by-Goss-et-al-30-with-real-colony (1).png}
+    \caption{Expérience du pont double}
+    
+\end{figure}
+\subsection{Résultats observés}
+
+Les résultats montrent que~:
+\begin{enumerate}
+    \item \textbf{Phase initiale}\,: Les fourmis explorent aléatoirement les deux branches avec une probabilité égale
+    \item \textbf{Phase d'accumulation}\,: Les fourmis empruntant la branche courte effectuent plus d'allers-retours dans le même temps, déposant plus de phéromone
+    \item \textbf{Phase de convergence}\,: La concentration de phéromone devient significativement plus élevée sur la branche courte
+    \item \textbf{Phase d'optimisation}\,: Après un certain temps, la majorité des fourmis utilisent exclusivement le chemin court
+\end{enumerate}
+
+\subsection{Facteurs clés du succès}
+
+\subsubsection{L'évaporation de la phéromone}
+
+La phéromone s'évapore naturellement au fil du temps \cite{jeanson2003}. Ce mécanisme est crucial car~:
+\begin{itemize}
+    \item Il permet d'oublier les mauvaises décisions initiales
+    \item Il évite la stagnation sur des chemins sous-optimaux
+    \item Il maintient une capacité d'adaptation aux changements
+\end{itemize}
+
+\subsubsection{Le comportement probabiliste}
+
+Les fourmis ne suivent pas systématiquement le chemin le plus marqué. La probabilité de choisir un chemin dépend de la concentration de phéromone selon une relation non-linéaire. Cette stochasticité permet l'exploration continue de nouvelles routes.
+
+\subsubsection{La communication indirecte (stigmergie)}
+
+Le concept de \textbf{stigmergie} décrit cette forme de communication indirecte où l'environnement sert de support de communication. Les actions d'une fourmi influencent les décisions des autres via la modification de l'environnement.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.75\linewidth]{images/knapsack-ants.svg_3ba4d1439a9945a11b2292b94405b546.png}
+    \caption{Traces de phéromone par des fourmis }
+    \label{fig:Cette figure montre comment les fourmis retrouvent le chemin vers la fourmilière avec les traces de phéromone par stigmergie}
+\end{figure}
+
+\section{Transposition au domaine algorithmique}
+
+La transposition de ce comportement naturel en algorithme informatique repose sur plusieurs analogies \cite{dorigo2006ieee}~:
+
+
+
+\begin{center}
+\rowcolors{2}{gray!10}{white} % alternance de couleurs
+\begin{tabular}{l l}
+\toprule
+\textbf{Système naturel} & \textbf{Système artificiel} \\
+\midrule
+Fourmi réelle & Fourmi artificielle (agent) \\
+Phéromone chimique & Phéromone numérique (matrice) \\
+Chemin physique & Solution candidate \\
+Concentration de phéromone & Qualité de la solution \\
+Évaporation naturelle & Facteur d'évaporation $\rho$ \\
+Probabilité de choix & Règle de transition probabiliste \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% Chapitre 3 : Description de l'Algorithme ACO
+\chapter{Description de l'Algorithme ACO}
+
+\section{Structure générale de l'algorithme}
+
+L'Ant Colony Optimization est une métaheuristique itérative basée sur une population d'agents (fourmis artificielles) qui construisent des solutions de manière probabiliste \cite{dorigo2006ieee}. La structure générale peut être décrite selon le schéma suivant~:
+
+\begin{algorithm}
+\caption{Structure générale de l'ACO}
+\begin{algorithmic}[1]
+\State Initialiser les paramètres
+\State Initialiser les phéromones $\tau_{ij} = \tau_0$ pour tous les composants
+\While{condition d'arrêt non atteinte}
+    \For{chaque fourmi $k = 1$ à $m$}
+        \State Construire une solution $S^k$ en utilisant les phéromones et l'information heuristique
+    \EndFor
+    \State (Optionnel) Appliquer une recherche locale aux solutions construites
+    \State Mettre à jour les phéromones selon la qualité des solutions
+    \State Appliquer l'évaporation des phéromones
+\EndWhile
+\State \Return Meilleure solution trouvée
+\end{algorithmic}
+\end{algorithm}
+
+\section{Composants clés de l'algorithme}
+
+\subsection{Représentation du problème}
+
+Pour appliquer l'ACO à un problème, il faut définir :
+\begin{itemize}
+    \item \textbf{Graphe de construction} $G = (C, L)$ où $C$ est l'ensemble des composants de solution et $L$ l'ensemble des connexions possibles
+    \item \textbf{Contraintes du problème} $\Omega$ définissant les solutions réalisables
+    \item \textbf{Fonction objectif} $f : S \rightarrow \mathbb{R}$ à minimiser ou maximiser
+\end{itemize}
+
+\subsection{Information phéromonale}
+
+Les phéromones artificielles sont représentées par une matrice $\tau$ :
+\begin{itemize}
+    \item $\tau_{ij}$ : niveau de phéromone associé à l'affectation de la classe $i$ à la salle $j$
+    \item $\tau_0$ : valeur initiale de phéromone
+    \item $\tau_{min}, \tau_{max}$ : bornes (MAX-MIN Ant System)
+\end{itemize}
+
+\subsection{Information heuristique}
+
+L'information heuristique $\eta_{ij}$ représente la désirabilité a priori d'affecter la classe $i$ à la salle $j$, basée sur :
+\begin{itemize}
+    \item Compatibilité de capacité
+    \item Absence de conflits horaires
+    \item Préférences pédagogiques
+\end{itemize}
+
+\subsection{Règle de transition probabiliste}
+
+La probabilité qu'une fourmi $k$ affecte la classe $i$ à la salle $j$ est :
+
+\begin{equation}
+p_{ij}^k = \begin{cases}
+\frac{[\tau_{ij}]^\alpha \cdot [\eta_{ij}]^\beta}{\sum_{l \in N_i^k} [\tau_{il}]^\alpha \cdot [\eta_{il}]^\beta} & \text{si } j \in N_i^k \\
+0 & \text{sinon}
+\end{cases}
+\end{equation}
+
+où :
+\begin{itemize}
+    \item $N_i^k$ : ensemble des salles compatibles pour la classe $i$
+    \item $\alpha$ : paramètre d'influence de la phéromone ($\alpha > 0$)
+    \item $\beta$ : paramètre d'influence de l'heuristique ($\beta \geq 0$)
+\end{itemize}
+
+\subsection{Mise à jour des phéromones}
+
+La mise à jour des phéromones combine deux mécanismes :
+
+\subsubsection{Évaporation}
+
+\begin{equation}
+\tau_{ij} \leftarrow (1 - \rho) \cdot \tau_{ij}
+\end{equation}
+où $\rho \in (0,1]$ est le taux d'évaporation.
+
+\subsubsection{Dépôt de phéromone}
+
+Seule la meilleure fourmi dépose de la phéromone :
+\begin{equation}
+\tau_{ij} \leftarrow \tau_{ij} + \Delta\tau_{ij}^{best}
+\end{equation}
+
+où :
+\begin{equation}
+\Delta\tau_{ij}^{best} = \begin{cases}
+\frac{Q}{f(S^{best})} & \text{si $(i,j)$ est dans } S^{best} \\
+0 & \text{sinon}
+\end{cases}
+\end{equation}
+
+\section{MAX-MIN Ant System}
+
+Le MAX-MIN Ant System (MMAS) \cite{stutzle2000} améliore l'ACO classique en :
+\begin{itemize}
+    \item Imposant des bornes $[\tau_{min}, \tau_{max}]$ sur les phéromones
+    \item Ne laissant que la meilleure fourmi déposer de la phéromone
+    \item Initialisant les phéromones à $\tau_{max}$ pour favoriser l'exploration initiale
+\end{itemize}
+
+Formule de mise à jour :
+\begin{equation}
+\tau_{ij} = \max\{\tau_{min}, \min\{\tau_{max}, (1-\rho)\tau_{ij} + \Delta\tau_{ij}^{best}\}\}
+\end{equation}
+
+% Chapitre 4 : Modélisation Mathématique
+\chapter{Modélisation Mathématique du Problème}
+
+\section{Définition formelle du problème}
+
+Le problème d'affectation de classes à des salles peut être formulé comme un problème d'optimisation combinatoire. Nous disposons d'un ensemble de classes $C = \{c_1, c_2, \ldots, c_n\}$ que nous devons affecter à un ensemble de salles $R = \{r_1, r_2, \ldots, r_k\}$ avec $k < n$ .
+
+\subsection{Variables de décision}
+
+Nous définissons les variables de décision binaires suivantes :
+
+\begin{equation}
+x_{ij} = \begin{cases}
+1 & \text{si la classe } c_i \text{ est affectée à la salle } r_j \\
+0 & \text{sinon}
+\end{cases}
+\quad \forall i \in \{1,\ldots,n\}, \forall j \in \{1,\ldots,k\}
+\end{equation}
+
+Ces variables constituent un problème d'optimisation \textbf{discret} puisque $x_{ij} \in \{0,1\}$.
+
+\subsection{Paramètres du problème}
+
+\subsubsection{Pour chaque classe $c_i$}
+
+\begin{itemize}
+    \item $E_i$ : effectif de la classe (nombre d'étudiants)
+    \item $T_i = \{t_i^1, t_i^2, \ldots, t_i^{p_i}\}$ : ensemble des créneaux horaires occupés par la classe
+    \item $L_i$ : niveau d'études (L1, L2, M1, etc.)
+    \item $D_i$ : département/filière (Informatique, Mathématiques, etc.)
+\end{itemize}
+
+\subsubsection{Pour chaque salle $r_j$}
+
+\begin{itemize}
+    \item $Cap_j$ : capacité maximale de la salle (nombre de places)
+    \item $Type_j$ : type de salle (amphithéâtre, salle TD, laboratoire, etc.)
+\end{itemize}
+
+\subsubsection{Matrice de compatibilité}
+
+\begin{equation}
+comp_{ij} = \begin{cases}
+1 & \text{si la classe } c_i \text{ est compatible avec la salle } r_j \\
+0 & \text{sinon}
+\end{cases}
+\end{equation}
+
+La compatibilité dépend du type de cours, des équipements nécessaires, etc.
+
+\subsection{Fonction de conflit temporel}
+
+Pour deux classes $c_i$ et $c_h$ affectées à la même salle $r_j$, un \textbf{conflit} se produit si leurs emplois du temps se chevauchent :
+
+\begin{equation}
+conflict(c_i, c_h) = \begin{cases}
+1 & \text{si } T_i \cap T_h \neq \emptyset \\
+0 & \text{sinon}
+\end{cases}
+\end{equation}
+
+\section{Fonction objectif}
+
+L'objectif principal est de \textbf{minimiser le nombre total de conflits d'emploi du temps}.
+
+\subsection{Nombre de conflits}
+
+Pour une solution $x = (x_{ij})$, le nombre total de conflits est :
+
+\begin{equation}
+f_1(x) = \sum_{j=1}^{k} \sum_{i=1}^{n} \sum_{h=i+1}^{n} x_{ij} \cdot x_{hj} \cdot conflict(c_i, c_h)
+\end{equation}
+
+Cette formule compte, pour chaque salle, le nombre de paires de classes affectées à cette salle dont les emplois du temps se chevauchent.
+
+\subsection{Critères secondaires}
+
+\subsubsection{Équilibre de charge des salles}
+
+On peut souhaiter équilibrer le nombre de classes par salle :
+
+\begin{equation}
+f_2(x) = \sum_{j=1}^{k} \left(\sum_{i=1}^{n} x_{ij} - \frac{n}{k}\right)^2
+\end{equation}
+
+\subsubsection{Taux d'occupation des salles}
+
+Minimiser le gaspillage de capacité :
+
+\begin{equation}
+f_3(x) = \sum_{j=1}^{k} \sum_{i=1}^{n} x_{ij} \cdot \max\{0, Cap_j - E_i\}
+\end{equation}
+
+\subsection{Fonction objectif globale}
+
+La fonction objectif globale est une combinaison pondérée :
+
+\begin{equation}
+f(x) = w_1 \cdot f_1(x) + w_2 \cdot f_2(x) + w_3 \cdot f_3(x)
+\end{equation}
+
+où $w_1, w_2, w_3 > 0$ sont des poids avec $w_1 \gg w_2, w_3$ car minimiser les conflits est prioritaire.
+
+Cette fonction objectif est \textbf{continue} bien que les variables de décision soient discrètes.
+
+\section{Contraintes}
+
+Les contraintes du problème de timetabling peuvent être classées en deux catégories distinctes \cite{mazlan2019, lewis2008} :
+
+\subsection{Contraintes hard (obligatoires)}
+
+Les contraintes hard ne peuvent en aucun cas être violées. Une solution qui viole au moins une contrainte hard est considérée comme \textbf{non réalisable}.
+
+\begin{itemize}
+    \item[\textbf{H1}] \textbf{Non-conflit étudiant} : Aucune classe ne peut être affectée à plus d'une salle au même moment
+    \item[\textbf{H2}] \textbf{Compatibilité salle-cours} : La salle doit satisfaire les équipements requis par le cours (projecteur, laboratoire, etc.)
+    \item[\textbf{H3}] \textbf{Respect de capacité} : Le nombre d'étudiants de la classe doit être inférieur ou égal à la capacité de la salle
+    \item[\textbf{H4}] \textbf{Non-double occupation} : Au plus un cours peut occuper une salle à un moment donné
+\end{itemize}
+
+Formellement, ces contraintes peuvent s'écrire :
+
+\begin{align}
+& \sum_{j=1}^{k} x_{ij} = 1 \quad \forall i \in \{1,\ldots,n\} && \text{(H1)} \\
+& x_{ij} \leq comp_{ij} \quad \forall i,j && \text{(H2)} \\
+& x_{ij} \cdot (E_i - Cap_j) \leq 0 \quad \forall i,j && \text{(H3)} \\
+& x_{ij} + x_{hj} \leq 1 \quad \forall j, \forall i \neq h : T_i \cap T_h \neq \emptyset && \text{(H4)}
+\end{align}
+
+\subsection{Contraintes soft (préférences)}
+
+Les contraintes soft représentent des préférences qui améliorent la qualité de l'emploi du temps mais dont la violation n'invalide pas la solution. L'objectif est de minimiser le nombre total de violations \cite{mazlan2019}.
+
+\begin{itemize}
+    \item[\textbf{S1}] \textbf{Limitation journalière} : Une classe ne devrait avoir qu'un seul cours par jour
+    \item[\textbf{S2}] \textbf{Éviter les séquences longues} : Éviter plus de 2 cours consécutifs pour une classe
+    \item[\textbf{S3}] \textbf{Éviter la dernière période} : Éviter d'affecter des cours à la dernière période de la journée
+    \item[\textbf{S4}] \textbf{Préférences enseignants} : Respecter les créneaux préférés des enseignants
+    \item[\textbf{S5}] \textbf{Équilibrage de charge} : Distribuer équitablement les cours entre les salles
+\end{itemize}
+
+La violation des contraintes soft peut être quantifiée par une fonction de pénalité :
+
+\begin{equation}
+penalty(x) = w_{S1} \cdot v_{S1}(x) + w_{S2} \cdot v_{S2}(x) + \cdots + w_{S5} \cdot v_{S5}(x)
+\end{equation}
+
+où $v_{Si}(x)$ est le nombre de violations de la contrainte soft $S_i$ et $w_{Si}$ est son poids de pénalité.
+
+\section{Formulation complète du problème}
+
+\begin{align}
+\min_{x_{ij}} \quad & f(x) = w_1 \cdot f_1(x) + w_2 \cdot f_2(x) + w_3 \cdot f_3(x) \\
+\text{s.c.} \quad & \sum_{j=1}^{k} x_{ij} = 1 \quad \forall i \in \{1,\ldots,n\} \\
+& x_{ij} \cdot (E_i - Cap_j) \leq 0 \quad \forall i,j \\
+& x_{ij} \leq comp_{ij} \quad \forall i,j \\
+& x_{ij} \in \{0,1\} \quad \forall i,j
+\end{align}
+
+\section{Complexité du problème}
+
+\subsection{Nature NP-difficile }
+
+Le problème d'affectation de classes à des salles avec contraintes de timetabling est \textbf{NP-difficile} \cite{socha2002}. Il peut être réduit au problème de coloration de graphes, qui est NP-complet.
+
+L'espace de recherche contient $k^n$ solutions possibles. Pour $n = 30$ classes et $k = 10$ salles, cela représente $10^{30}$ solutions, ce qui rend impraticable une énumération exhaustive.
+
+\subsection{Justification de l'approche métaheuristique}
+
+Face à cette complexité, les métaheuristiques comme l'ACO offrent un compromis efficace entre qualité de la solution et temps de calcul \cite{dorigo2004book, socha2002}.
+
+\section{Représentation graphique du problème}
+
+Pour appliquer l'ACO, nous modélisons le problème comme un \textbf{graphe de construction biparti} $G = (C \cup R, E)$ où :
+
+\begin{itemize}
+    \item $C$ : ensemble des classes
+    \item $R$ : ensemble des salles
+    \item $E$ : ensemble des arêtes $(c_i, r_j)$ représentant les affectations possibles
+\end{itemize}
+
+Une \textbf{solution} correspond à une affectation complète de toutes les classes aux salles.
+
+Les \textbf{phéromones} $\tau_{ij}$ sont déposées sur les arêtes, représentant la "désirabilité" d'affecter la classe $c_i$ à la salle $r_j$ basée sur l'expérience collective des fourmis.
+
+% Chapitre 5 : Adaptation de l'ACO
+\chapter{Adaptation de l'ACO au Problème de Timetabling}
+
+\section{Information heuristique}
+
+L'information heuristique $\eta_{ij}$ guide les fourmis vers des affectations localement bonnes. Pour notre problème, nous définissons plusieurs composantes.
+
+\subsection{Heuristique de capacité}
+
+Plus la capacité de la salle est proche de l'effectif de la classe, plus l'affectation est désirable :
+
+\begin{equation}
+\eta_{ij}^{cap} = \frac{1}{1 + |Cap_j - E_i|}
+\end{equation}
+
+\subsection{Heuristique de conflit}
+
+Moins une salle a de classes déjà affectées qui entrent en conflit avec la classe $c_i$, plus l'affectation est désirable. Soit $S_j^k$ l'ensemble des classes déjà affectées à la salle $r_j$ dans la solution partielle $S^k$ :
+
+\begin{equation}
+\eta_{ij}^{conf} = \frac{1}{1 + \sum_{c_h \in S_j^k} conflict(c_i, c_h)}
+\end{equation}
+
+\subsection{Heuristique de charge}
+
+Favoriser les salles ayant moins de classes affectées pour équilibrer la charge :
+
+\begin{equation}
+\eta_{ij}^{load} = \frac{1}{1 + |S_j^k|}
+\end{equation}
+
+\subsection{Heuristique combinée avec paramètres de disponibilité}
+
+En s'inspirant des travaux d'Aslan et Aci \cite{aslan2018}, nous enrichissons l'information heuristique en intégrant les disponibilités des enseignants. L'heuristique finale devient :
+
+\begin{equation}
+\eta_{ij} = \eta_{ij}^{cap} \cdot (\eta_{ij}^{conf})^2 \cdot \eta_{ij}^{load} \cdot \eta_{ij}^{avail}
+\end{equation}
+
+où $\eta_{ij}^{avail}$ reflète la disponibilité de l'enseignant pour le créneau considéré.
+
+\subsection{Formule ACO enrichie pour le timetabling}
+
+La règle de transition probabiliste complète, adaptée de \cite{mazlan2019, aslan2018}, devient :
+
+\begin{equation}
+p_{ij}^k = \begin{cases}
+\frac{[\tau_{ij}]^\alpha \cdot [\eta_{ij}]^\beta \cdot [\mu_j]^\theta \cdot [\lambda_j]^\delta \cdot [\nu_{jh}]^\gamma}{\sum_{l \in N_i^k} [\tau_{il}]^\alpha \cdot [\eta_{il}]^\beta \cdot [\mu_l]^\theta \cdot [\lambda_l]^\delta \cdot [\nu_{lh}]^\gamma} & \text{si } j \in N_i^k \\
+0 & \text{sinon}
+\end{cases}
+\end{equation}
+
+où :
+\begin{itemize}
+    \item $\mu_j$ : heures théoriques du cours $j$
+    \item $\lambda_j$ : disponibilité hebdomadaire totale de l'enseignant
+    \item $\nu_{jh}$ : disponibilité de l'enseignant pour le créneau horaire $h$
+    \item $\theta, \delta, \gamma$ : paramètres d'importance relative de ces facteurs
+\end{itemize}
+
+Cette formulation permet de prendre en compte non seulement les contraintes de capacité et de conflits, mais aussi les préférences et disponibilités des enseignants.
+
+\section{Méthode de sélection par roulette}
+
+Pour la sélection probabiliste des salles et des cours, nous utilisons la \textbf{méthode de la roulette} (roulette wheel selection) \cite{aslan2018}.
+
+\subsection{Principe}
+
+Étant donné un ensemble de $n$ choix avec des probabilités $p_1, p_2, \ldots, p_n$ où $\sum_{i=1}^n p_i = 1$, la méthode de la roulette sélectionne un élément $j$ en :
+
+\begin{enumerate}
+    \item Calculant les probabilités cumulatives : $P_i = \sum_{l=1}^{i} p_l$
+    \item Générant un nombre aléatoire $r \in [0,1]$
+    \item Sélectionnant l'élément $j$ tel que $P_{j-1} < r \leq P_j$
+\end{enumerate}
+
+\subsection{Algorithme de sélection}
+
+\begin{algorithm}[H]
+\caption{Sélection par roulette}
+\begin{algorithmic}[1]
+\State \textbf{Entrée :} Probabilités $p_1, \ldots, p_n$
+\State \textbf{Sortie :} Indice sélectionné $j$
+\State
+\State $cumul[1] \leftarrow p_1$
+\For{$i = 2$ \textbf{à} $n$}
+    \State $cumul[i] \leftarrow cumul[i-1] + p_i$
+\EndFor
+\State $r \leftarrow random(0, 1)$
+\For{$j = 1$ \textbf{à} $n$}
+    \If{$r \leq cumul[j]$}
+        \State \Return $j$
+    \EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+Cette méthode garantit que chaque choix est sélectionné avec une probabilité proportionnelle à $p_i$, tout en introduisant de la stochasticité nécessaire à l'exploration de l'espace de recherche.
+
+\section{Algorithme ACO adapté pour le problème}
+
+\begin{algorithm}[H]
+\caption{ACO pour l'affectation de classes à des salles}
+\begin{minipage}{\textwidth}
+\scriptsize 
+\begin{algorithmic}[1]
+\State \textbf{Entrées :} 
+\State \quad $C = \{c_1, \ldots, c_n\}$ : classes avec effectifs $E_i$ et emplois du temps $T_i$
+\State \quad $R = \{r_1, \ldots, r_k\}$ : salles avec capacités $Cap_j$
+\State \quad $comp_{ij}$ : matrice de compatibilité
+\State \quad $m$ : nombre de fourmis
+\State \quad $\alpha, \beta, \rho, Q$ : paramètres ACO
+\State \quad $MaxIterations$ : nombre maximum d'itérations
+\State
+\State \textbf{Initialisation :}
+\State $\tau_{ij} \leftarrow \tau_{max}$ pour tout $i,j$ compatible
+\State $S^{best} \leftarrow \emptyset$, $f^{best} \leftarrow +\infty$
+\State $iteration \leftarrow 0$
+\State
+\While{$iteration < MaxIterations$ \textbf{et non convergence}}
+    \State $S^{best\_cycle} \leftarrow \emptyset$, $f^{best\_cycle} \leftarrow +\infty$
+    \For{$ant = 1$ \textbf{à} $m$}
+        \State \textbf{// Construction de solution}
+        \State $S^{ant} \leftarrow \emptyset$
+        \State $C_{restantes} \leftarrow C$
+        \State $S_j^{ant} \leftarrow \emptyset$ pour tout $j$ \Comment{Classes affectées à chaque salle}
+        \While{$C_{restantes} \neq \emptyset$}
+            \State Sélectionner aléatoirement $c_i \in C_{restantes}$
+            \State $N_i \leftarrow \{r_j : comp_{ij} = 1 \text{ et } E_i \leq Cap_j\}$ \Comment{Salles compatibles}
+            \For{chaque $r_j \in N_i$}
+                \State Calculer $\eta_{ij}^{cap} = \frac{1}{1 + |Cap_j - E_i|}$
+                \State Calculer $\eta_{ij}^{conf} = \frac{1}{1 + \sum_{c_h \in S_j^{ant}} conflict(c_i, c_h)}$
+                \State Calculer $\eta_{ij}^{load} = \frac{1}{1 + |S_j^{ant}|}$
+                \State Calculer $\eta_{ij} = \eta_{ij}^{cap} \cdot (\eta_{ij}^{conf})^2 \cdot \eta_{ij}^{load}$
+            \EndFor
+            \State Calculer $p_{ij}^{ant} = \frac{[\tau_{ij}]^\alpha \cdot [\eta_{ij}]^\beta}{\sum_{l \in N_i} [\tau_{il}]^\alpha \cdot [\eta_{il}]^\beta}$ pour tout $j \in N_i$
+            \State Sélectionner $r_{j^*}$ selon la distribution de probabilité $p_{ij}^{ant}$
+            \State $S^{ant} \leftarrow S^{ant} \cup \{(c_i, r_{j^*})\}$
+            \State $S_{j^*}^{ant} \leftarrow S_{j^*}^{ant} \cup \{c_i\}$
+            \State $C_{restantes} \leftarrow C_{restantes} \setminus \{c_i\}$
+        \EndWhile
+    
+        \State \textbf{// Évaluation de la solution}
+        \State Calculer $f(S^{ant})$ selon l'équation (4.8)
+        \If{$f(S^{ant}) < f^{best\_cycle}$}
+            \State $S^{best\_cycle} \leftarrow S^{ant}$
+            \State $f^{best\_cycle} \leftarrow f(S^{ant})$
+        \EndIf
+        \If{$f(S^{ant}) < f^{best}$}
+            \State $S^{best} \leftarrow S^{ant}$
+            \State $f^{best} \leftarrow f(S^{ant})$
+        \EndIf
+    \EndFor
+    
+    \State \textbf{// Mise à jour des phéromones (MAX-MIN)}
+    \State \textbf{// Évaporation}
+    \For{tout $(i,j)$ compatible}
+        \State $\tau_{ij} \leftarrow (1-\rho) \cdot \tau_{ij}$
+    \EndFor
+    
+    \State \textbf{// Dépôt de phéromone}
+    \State $\Delta\tau \leftarrow \frac{Q}{1 + f^{best\_cycle} - f^{best}}$
+    \For{chaque affectation $(c_i, r_j) \in S^{best\_cycle}$}
+        \State $\tau_{ij} \leftarrow \tau_{ij} + \Delta\tau$
+    \EndFor
+    
+    \State \textbf{// Application des bornes MAX-MIN}
+    \For{tout $(i,j)$ compatible}
+        \State $\tau_{ij} \leftarrow \max\{\tau_{min}, \min\{\tau_{max}, \tau_{ij}\}\}$
+    \EndFor
+    
+    \State $iteration \leftarrow iteration + 1$
+\EndWhile
+
+\State \textbf{Retourner} $S^{best}$
+\end{algorithmic}
+\end{minipage}
+\end{algorithm}
+
+
+
+
+\section{Paramètres de l'algorithme}
+
+D'après les travaux sur le timetabling universitaire avec ACO \cite{socha2002, alaya2007}, 
+voici les paramètres recommandés :
+
+\begin{center}
+\rowcolors{2}{gray!10}{white} % alternance de couleurs
+\begin{tabular}{l l p{7cm}}
+\toprule
+\textbf{Paramètre} & \textbf{Valeur} & \textbf{Rôle} \\
+\midrule
+$\alpha$ & $1$ & Influence de la phéromone \\
+$\beta$ & $5$ & Influence de l'heuristique (privilégie l'évitement de conflits) \\
+$\rho$ & $0.01$ & Taux d'évaporation (favorise l'exploration) \\
+$m$ & $30$ & Nombre de fourmis \\
+$Q$ & $100$ & Constante de dépôt \\
+$\tau_{min}$ & $0.01$ & Borne inférieure (MAX-MIN) \\
+$\tau_{max}$ & $6$ & Borne supérieure (MAX-MIN) \\
+$w_1$ & $1000$ & Poids des conflits (prioritaire) \\
+$w_2$ & $1$ & Poids de l'équilibre \\
+$w_3$ & $0.1$ & Poids de l'occupation \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Complexité algorithmique}
+
+\subsection{Complexité d'une itération}
+
+Pour chaque fourmi :
+\begin{itemize}
+    \item Construction : $O(n \cdot k)$ (pour $n$ classes et $k$ salles)
+    \item Évaluation des conflits : $O(n^2)$ dans le pire cas
+\end{itemize}
+
+Pour $m$ fourmis : $O(m \cdot n \cdot (k + n))$
+
+Mise à jour des phéromones : $O(n \cdot k)$
+
+Pour $T$ itérations : $O(T \cdot m \cdot n \cdot (k + n))$
+
+\subsection{Exemple numérique}
+
+Pour $n = 30$ classes, $k = 10$ salles, $m = 30$ fourmis, $T = 1000$ itérations :
+\begin{equation}
+1000 \times 30 \times 30 \times (10 + 30) \approx 3.6 \times 10^7 \text{ opérations}
+\end{equation}
+
+Temps de calcul estimé : quelques dizaines de secondes sur un ordinateur moderne.
+
+% =====================================================================
+% CHAPITRE 6 : IMPLÉMENTATION ET APPLICATION NUMÉRIQUE
+% =====================================================================
+
+% =====================================================================
+% CHAPITRE 6 : IMPLÉMENTATION PYTHON ET APPLICATION
+% =====================================================================
+
+\chapter{Implémentation Python et Application au Campus de Sogbo-Aliho}
+
+\section{Vue d'ensemble du système}
+
+\subsection{Architecture modulaire}
+
+L'implémentation Python repose sur une architecture modulaire organisée en trois classes principales, garantissant une séparation claire des responsabilités et une maintenabilité optimale du code.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[
+    node distance=1.2cm,
+    module/.style={rectangle, rounded corners=4pt, draw=unstimblue, thick, fill=unstimblue!8, minimum width=4.2cm, minimum height=1.6cm, align=center, font=\small\sffamily},
+    data/.style={rectangle, draw=neutral!50, dashed, thick, fill=neutral!5, minimum width=2.8cm, minimum height=1.2cm, align=center, font=\scriptsize\ttfamily},
+    flow/.style={->, >=stealth, thick, ensgmmred},
+    label/.style={font=\scriptsize\itshape, color=neutral}
+]
+    % Modules
+    \node[module] (input) {\textbf{InputData}\\\small{Chargement et structuration des données}};
+    \node[module, below of= input] (aco) {\textbf{ACO\_Timetabling}\\\small{Algorithme d'optimisation principal}};
+    \node[module, below of= aco] (export) {\textbf{DataExporter}\\\small{Export et visualisation}};
+    
+    % Fichiers de données
+    \node[data, left=1.5cm of input] (json) {\texttt{scenario\_40\_final.json}\\Configuration};
+    \node[data, right=1.5cm of export] (csv) {\texttt{results.csv}\\Résultats};
+    
+    % Flux de données
+    \draw[flow] (json) -- node[midway, above, label] {Lecture} (input);
+    \draw[flow] (input) -- node[midway, right, label, text width=3cm] {Tâches, Slots, Matrice de compatibilité} (aco);
+    \draw[flow] (aco) -- node[midway, right, label, text width=3cm] {Solution optimale, Métriques} (export);
+    \draw[flow] (export) -- node[midway, above, label] {Export} (csv);
+\end{tikzpicture}
+\caption{Architecture modulaire du système d'optimisation}
+\label{fig:architecture_systeme}
+\end{figure}
+
+\subsection{Flux de données}
+
+Le système suit un pipeline d'exécution en quatre phases successives :
+
+\begin{enumerate}[label=\textbf{\Roman*.}, leftmargin=2cm, itemsep=0.8em]
+    \item \textbf{Initialisation} : Chargement des paramètres depuis le fichier JSON de configuration.
+    \item \textbf{Prétraitement} : Génération des tâches (cours) et slots (salles × créneaux), construction de la matrice de compatibilité.
+    \item \textbf{Optimisation} : Exécution de l'algorithme MAX-MIN Ant System avec évaluation des solutions.
+    \item \textbf{Post-traitement} : Export des résultats au format CSV pour analyse.
+\end{enumerate}
+
+\subsection{Technologies utilisées}
+
+\begin{itemize}
+    \item \textbf{Python 3.9} : Langage principal pour sa simplicité et richesse des bibliothèques scientifiques
+    \item \textbf{NumPy} : Manipulation efficace des matrices (phéromones, compatibilité)
+    \item \textbf{JSON} : Format de configuration lisible et modifiable
+    \item \textbf{CSV} : Export standard compatible avec Excel, R, et autres outils
+    \item \textbf{Jupyter Notebook} : Environnement interactif pour le développement et tests
+\end{itemize}
+
+\section{Scénario détaillé du Campus de Sogbo-Aliho}
+
+\subsection{Classes et effectifs}
+
+Le campus compte 10 classes réparties en trois filières, avec un total de 352 étudiants.
+
+\begin{table}[h!]
+\centering
+\caption{Classes du campus de Sogbo-Aliho}
+\label{tab:classes_campus}
+\small
+\begin{tabularx}{\textwidth}{l c l X}
+\toprule
+\textbf{Classe} & \textbf{Effectif} & \textbf{Filière} & \textbf{Matières (4 par classe)} \\
+\midrule
+ENSTP-L1 & 75 & Travaux Publics & Mathématiques I, Physique I, RDM I, Topographie I \\
+ENSTP-L3 & 55 & Travaux Publics & Mathématiques III, Physique III, RDM III, Projet Construction \\
+ENSTP-I1 & 60 & Travaux Publics & Mécanique des Fluides, Géotechnique I, Matériaux, Hydraulique \\
+ENSTP-I3 & 20 & Travaux Publics & Béton Armé, Charpente Métallique, Voiries, Gestion de Projet \\
+GMM-I1 & 27 & Génie Mathématique & Analyse Fonctionnelle I, Algèbre Linéaire I, Modélisation I, Optimisation I \\
+GMM-I2 & 25 & Génie Mathématique & Analyse II, Algèbre II, Modélisation II, Optimisation II \\
+GMM-I3 & 23 & Génie Mathématique & Analyse III, Algèbre III, Modélisation III, Optimisation III \\
+GEP-I1 & 27 & Génie Énergétique & Thermodynamique I, Transfert Chaleur I, Énergies I, Chimie I \\
+GEP-I2 & 20 & Génie Énergétique & Thermodynamique II, Transfert II, Énergies II, Chimie II \\
+GEP-I3 & 20 & Génie Énergétique & Thermodynamique III, Transfert III, Énergies III, Chimie III \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Salles et capacités}
+
+Le campus dispose de 7 salles aux capacités variées, adaptées aux différents types d'enseignement.
+
+\begin{table}[h!]
+\centering
+\caption{Salles disponibles sur le campus}
+\label{tab:salles_campus}
+\small
+\begin{tabularx}{\textwidth}{l c l X}
+\toprule
+\textbf{Salle} & \textbf{Capacité} & \textbf{Type} & \textbf{Utilisation prévue} \\
+\midrule
+TD-1 & 30 & Salle de TD & Groupes GMM et GEP (20-27 étudiants) \\
+TD-2 & 30 & Salle de TD & Groupes GMM et GEP (20-27 étudiants) \\
+TD-3 & 30 & Salle de TD & Groupes GMM et GEP (20-27 étudiants) \\
+TD-4 & 30 & Salle de TD & Groupes GMM et GEP (20-27 étudiants) \\
+SALLE-60 & 60 & Salle de cours & ENSTP-L3, ENSTP-I1 \\
+AMPHI-100 & 100 & Amphithéâtre & ENSTP-L1, ENSTP-L3 \\
+AMPHI-200 & 200 & Amphithéâtre & ENSTP-L1 (grands groupes) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Structure temporelle}
+
+La grille horaire hebdomadaire est structurée en :
+\begin{itemize}
+    \item \textbf{6 jours} : Lundi (L), Mardi (Ma), Mercredi (Me), Jeudi (J), Vendredi (V), Samedi (S)
+    \item \textbf{2 périodes par jour} : Matin (8h-11h) et Après-midi (14h-17h)
+    \item \textbf{Total} : 12 créneaux horaires distincts
+\end{itemize}
+
+\subsection{Cas particulier INSPEI (pré-affectation)}
+
+Les classes préparatoires INSPEI (Prépa-1 et Prépa-2, 60 étudiants chacune) font l'objet d'une \textbf{pré-affectation} spécifique :
+\begin{itemize}
+    \item Elles disposent de salles dédiées (INSPEI-1 et INSPEI-2, 60 places chacune)
+    \item Leur emploi du temps est fixé en amont et n'est pas optimisé par l'ACO
+    \item Cette séparation permet de réduire la complexité du problème tout en respectant les contraintes opérationnelles
+\end{itemize}
+
+\subsection{Modélisation en "Tâches" et "Slots"}
+
+Pour transformer le problème concret en problème d'optimisation, nous introduisons deux abstractions fondamentales :
+
+\paragraph{Tâche} Une tâche $t_i \in T$ représente un cours spécifique à planifier, défini par le triplet (\textit{Classe}, \textit{Matière}, \textit{Effectif}). Par exemple : \texttt{GMM-I1\_Algèbre\_Linéaire\_I} (27 étudiants).
+
+\paragraph{Slot} Un slot $s_j \in S$ représente une ressource spatio-temporelle disponible, définie par le couple (\textit{Salle}, \textit{Créneau}). Par exemple : \texttt{TD-1\_Lundi\_Matin} (salle TD-1, 30 places, lundi 8h-11h).
+
+\begin{table}[h!]
+\centering
+\caption{Caractéristiques du problème d'optimisation}
+\label{tab:caracteristiques_probleme}
+\small
+\begin{tabularx}{\textwidth}{l c c}
+\toprule
+\textbf{Élément} & \textbf{Symbole} & \textbf{Valeur} \\
+\midrule
+Tâches à affecter & $n = |T|$ & 40 (10 classes × 4 matières) \\
+Slots disponibles & $k = |S|$ & 84 (7 salles × 12 créneaux) \\
+Taux d'occupation & $\frac{n}{k}$ & 47.6\% \\
+Solutions possibles & $k^n$ & $84^{40} \approx 1.3 \times 10^{77}$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Mappage avec les variables mathématiques}
+
+Le tableau ci-dessous établit la correspondance entre la modélisation mathématique (Chapitre 4) et l'implémentation Python :
+
+\begin{table}[h!]
+\centering
+\caption{Correspondance variables mathématiques ↔ implémentation}
+\label{tab:mappage_variables}
+\small
+\begin{tabularx}{\textwidth}{l l l}
+\toprule
+\textbf{Concept mathématique} & \textbf{Symbole} & \textbf{Implémentation Python} \\
+\midrule
+Variable de décision & $x_{ij} \in \{0,1\}$ & Dictionnaire \texttt{solution\_ant[tache\_id] = slot\_id} \\
+Matrice de compatibilité & $comp_{ij}$ & \texttt{COMPATIBILITY\_MATRIX[i, j]} \\
+Matrice de phéromones & $\tau_{ij}$ & \texttt{pheromones[i, j]} \\
+Information heuristique & $\eta_{ij}$ & Méthode \texttt{\_calculate\_heuristic()} \\
+Fonction objectif & $f(x) = w_1 f_1 + w_2 f_2 + w_3 f_3$ & \texttt{calculate\_objective\_function()} \\
+Contrainte H1 (non-conflit) & $\sum_j x_{ij} = 1$ & Vérification par créneau dans \texttt{\_get\_f1\_conflicts()} \\
+Contrainte H2 (compatibilité) & $x_{ij} \leq comp_{ij}$ & Matrice binaire de compatibilité \\
+Contrainte H3 (capacité) & $E_i \leq Cap_j$ & Filtrage dans \texttt{\_build\_compatibility\_matrix()} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Module InputData : Structuration des données}
+
+\subsection{Chargement de la configuration JSON}
+
+Le module \texttt{InputData} charge la configuration depuis un fichier JSON structuré contenant :
+\begin{itemize}
+    \item Les paramètres de l'algorithme ACO ($\alpha$, $\beta$, $\rho$, etc.)
+    \item La description des salles (nom, capacité, type)
+    \item Les classes avec leurs effectifs et listes de matières
+\end{itemize}
+
+\subsection{Génération des tâches (Classe × Matière)}
+
+Chaque combinaison (Classe, Matière) devient une tâche unique. L'identifiant est généré automatiquement pour garantir l'unicité.
+
+\begin{lstlisting}[
+    language=Python,
+    frame=lines,
+    framesep=2mm,
+    backgroundcolor=\color{gray!3},
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left
+]
+def generate_tasks(self, config):
+    """Génère la liste des tâches à partir de la configuration."""
+    tasks = []
+    for classe, details in config['CLASSES_DETAILS'].items():
+        effectif = details['effectif']
+        for matiere in details['matieres']:
+            task_id = f"{classe}_{matiere.replace(' ', '_')}"
+            tasks.append({
+                'id': task_id,
+                'classe': classe,
+                'matiere': matiere,
+                'effectif': effectif
+            })
+    return tasks
+\end{lstlisting}
+
+\subsection{Génération des slots (Salle × Créneau)}
+
+Les slots sont créés par produit cartésien entre les salles et les créneaux horaires.
+
+\begin{lstlisting}[
+    language=Python,
+    frame=lines,
+    framesep=2mm,
+    backgroundcolor=\color{gray!3},
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left
+]
+def generate_slots(self):
+    """Génère tous les slots disponibles (Salle × Créneau)."""
+    slots = {}
+    for salle, (capacite, type_salle) in self.SALLES.items():
+        for jour in ['L', 'Ma', 'Me', 'J', 'V', 'S']:
+            for periode in ['Matin', 'Aprem']:
+                creneau = f"{jour}_{periode}"
+                slot_id = f"{salle}_{creneau}"
+                slots[slot_id] = {
+                    'Salle': salle,
+                    'Creneau': creneau,
+                    'Capacite': capacite,
+                    'Type_Salle': type_salle
+                }
+    return slots
+\end{lstlisting}
+
+\subsection{Matrice de compatibilité}
+
+La matrice binaire $comp_{ij}$ encode simultanément les contraintes H2 (compatibilité) et H3 (capacité).
+
+\begin{lstlisting}[
+    language=Python,
+    frame=lines,
+    framesep=2mm,
+    backgroundcolor=\color{gray!3},
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left
+]
+def _build_compatibility_matrix(self):
+    """Construit la matrice de compatibilité Tâches × Slots."""
+    matrix = np.zeros((self.N_TACHES, self.N_SLOTS))
+    
+    for i, tache in enumerate(self.TACHES):
+        effectif = tache['Effectif']
+        classe_name = tache['Classe']
+        
+        for j, slot_id in enumerate(self.SLOT_IDS):
+            slot = self.SLOTS[slot_id]
+            capacite = slot['Capacite']
+            type_salle = self.SALLES[slot['Salle']][1]
+            
+            # H3: Respect de capacité
+            if effectif <= capacite:
+                # H2: Compatibilité type de salle
+                if self._is_td_class(classe_name):
+                    if type_salle == 'TD':
+                        matrix[i, j] = 1
+                else:  # Classe ENSTP
+                    if type_salle in ['SC', 'AMPHI']:
+                        matrix[i, j] = 1
+    return matrix
+\end{lstlisting}
+
+\section{Module ACO\_Timetabling : Cœur de l'algorithme}
+
+\subsection{Initialisation}
+
+L'initialisation suit le schéma MAX-MIN Ant System (MMAS) avec bornes sur les phéromones.
+
+\begin{lstlisting}[
+    language=Python,
+    frame=lines,
+    framesep=2mm,
+    backgroundcolor=\color{gray!3},
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left
+]
+def __init__(self, data, config):
+    self.data = data
+    self.params = config['ACO_PARAMS']
+    
+    # Initialisation des paramètres
+    self.alpha = self.params.get('alpha', 1)
+    self.beta = self.params.get('beta', 5)
+    self.rho = self.params.get('rho', 0.01)
+    self.tau_max = self.params.get('tau_max', 6)
+    self.tau_min = self.params.get('tau_min', 0.01)
+    
+    # Initialisation des phéromones (MAX-MIN)
+    self.pheromones = self.data.COMPATIBILITY_MATRIX.copy()
+    self.pheromones[self.pheromones == 1] = self.tau_max
+    self.pheromones[self.pheromones == 0] = 0
+\end{lstlisting}
+
+\subsection{Calcul de l'heuristique}
+
+L'information heuristique combine trois facteurs selon l'équation $\eta_{ij} = \eta_{ij}^{cap} \times \eta_{ij}^{conf} \times \eta_{ij}^{load}$.
+
+\begin{lstlisting}[
+    language=Python,
+    frame=lines,
+    framesep=2mm,
+    backgroundcolor=\color{gray!3},
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left
+]
+def _calculate_heuristic(self, tache_id, slot_id, solution_partial):
+    """Calcule l'information heuristique pour une affectation."""
+    tache = self.data.tache_map[tache_id]
+    slot = self.data.SLOTS[slot_id]
+    
+    effectif = tache['Effectif']
+    capacite = slot['Capacite']
+    
+    # η_cap : Proximité capacité-effectif
+    eta_cap = 1.0 / (1 + abs(capacite - effectif))
+    
+    # η_conf : Éviter les conflits H1
+    n_conflicts = self._count_conflicts(tache, slot, solution_partial)
+    eta_conf = 1.0 / (1 + n_conflicts**2)
+    
+    # η_load : Équilibrer la charge de la salle
+    tasks_in_room = self._count_tasks_in_room(slot['Salle'], solution_partial)
+    eta_load = 1.0 / (1 + tasks_in_room)
+    
+    return eta_cap * eta_conf * eta_load
+\end{lstlisting}
+
+\subsection{Construction de solution}
+
+Chaque fourmi construit une solution complète en sélectionnant itérativement des slots pour chaque tâche.
+
+\begin{lstlisting}[
+    language=Python,
+    frame=lines,
+    framesep=2mm,
+    backgroundcolor=\color{gray!3},
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left
+]
+def construct_solution(self):
+    """Une fourmi construit une solution complète."""
+    solution = {}
+    taches_restantes = list(self.data.TACHE_IDS)
+    random.shuffle(taches_restantes)
+    
+    for tache_id in taches_restantes:
+        tache_idx = self.data.TACHE_IDS.index(tache_id)
+        allowed_slots = np.where(self.data.COMPATIBILITY_MATRIX[tache_idx, :] == 1)[0]
+        
+        # Calcul des probabilités
+        probs = self._transition_probability(tache_idx, allowed_slots, solution)
+        
+        # Sélection par roulette
+        selected_slot_idx = random.choices(allowed_slots, weights=probs, k=1)[0]
+        slot_id = self.data.SLOT_IDS[selected_slot_idx]
+        
+        solution[tache_id] = slot_id
+    
+    return solution
+\end{lstlisting}
+
+\subsection{Évaluation (f1, f2, f3)}
+
+La fonction objectif évalue trois critères avec pondérations différentes.
+
+\begin{lstlisting}[
+    language=Python,
+    frame=lines,
+    framesep=2mm,
+    backgroundcolor=\color{gray!3},
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left
+]
+def calculate_objective_function(self, solution):
+    """Calcule f(x) = w1*f1 + w2*f2 + w3*f3"""
+    # f1 : Conflits H1
+    f1 = self._count_h1_conflicts(solution)
+    
+    # f2 : Équilibre de charge
+    f2 = self._calculate_load_balance(solution)
+    
+    # f3 : Gaspillage de capacité
+    f3 = self._calculate_waste(solution)
+    
+    # Pondérations
+    w1, w2, w3 = 1000, 1, 0.1
+    return w1*f1 + w2*f2 + w3*f3, f1, f2, f3
+\end{lstlisting}
+
+\subsection{Mise à jour des phéromones}
+
+La mise à jour suit le schéma MMAS avec évaporation et dépôt bornés.
+
+\begin{lstlisting}[
+    language=Python,
+    frame=lines,
+    framesep=2mm,
+    backgroundcolor=\color{gray!3},
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left
+]
+def update_pheromones(self, best_solution, f_best):
+    """Mise à jour MMAS des phéromones."""
+    # Évaporation
+    self.pheromones = (1 - self.rho) * self.pheromones
+    
+    # Dépôt par la meilleure solution
+    delta_tau = self.Q / (f_best + 1.0)
+    for tache_id, slot_id in best_solution.items():
+        i = self.data.TACHE_IDS.index(tache_id)
+        j = self.data.SLOT_IDS.index(slot_id)
+        self.pheromones[i, j] += delta_tau
+    
+    # Application des bornes MAX-MIN
+    self.pheromones = np.clip(self.pheromones, self.tau_min, self.tau_max)
+\end{lstlisting}
+
+\section{Analyse de la complexité algorithmique}
+
+\subsection{Complexité théorique en fonction de n et k}
+
+La complexité de l'algorithme ACO peut être analysée en fonction des paramètres clés du problème :
+\begin{itemize}
+    \item $n$ : nombre de tâches à affecter
+    \item $k$ : nombre de slots disponibles
+    \item $m$ : nombre de fourmis par itération
+    \item $T$ : nombre d'itérations
+\end{itemize}
+
+\subsubsection{Complexité par opération}
+
+\begin{table}[h!]
+\centering
+\caption{Analyse détaillée de la complexité}
+\label{tab:analyse_complexite}
+\small
+\begin{tabularx}{\textwidth}{l c l}
+\toprule
+\textbf{Opération} & \textbf{Complexité} & \textbf{Description} \\
+\midrule
+Génération des tâches & $O(n)$ & Simple parcours linéaire \\
+Génération des slots & $O(k)$ & Produit cartésien salles × créneaux \\
+Construction matrice compatibilité & $O(n \times k)$ & Vérification pour chaque paire (tâche, slot) \\
+Construction solution (par fourmi) & $O(n \times k)$ & Pour chaque tâche, évaluation de tous les slots compatibles \\
+Calcul heuristique $\eta_{ij}$ & $O(1)$ & Opérations élémentaires par paire (tâche, slot) \\
+Évaluation fonction objectif & $O(n)$ & Parcours linéaire pour f1, f2, f3 \\
+Mise à jour phéromones & $O(n \times k)$ & Évaporation + dépôt sur toutes les paires \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Complexité totale de l'algorithme}
+
+Pour $T$ itérations avec $m$ fourmis, la complexité totale est :
+
+\[
+C_{\text{total}} = O(T \times m \times n \times k)
+\]
+
+\begin{itemize}
+    \item \textbf{Phase de construction} : $O(T \times m \times n \times k)$
+    \item \textbf{Phase d'évaluation} : $O(T \times m \times n)$
+    \item \textbf{Phase de mise à jour} : $O(T \times n \times k)$
+\end{itemize}
+
+Le terme dominant est donc $O(T \times m \times n \times k)$.
+
+\subsection{Application numérique aux scénarios}
+
+\begin{table}[h!]
+\centering
+\caption{Complexité comparative des deux scénarios}
+\label{tab:complexite_scenarios}
+\small
+\begin{tabularx}{\textwidth}{l c c c}
+\toprule
+\textbf{Paramètre} & \textbf{Symbole} & \textbf{Scénario 1 (40 tâches)} & \textbf{Scénario 2 (84 tâches)} \\
+\midrule
+Nombre de tâches & $n$ & 40 & 84 \\
+Nombre de slots & $k$ & 84 & 84 \\
+Nombre de fourmis & $m$ & 30 & 50 \\
+Nombre d'itérations & $T$ & 150 & 300 \\
+\hline
+Complexité théorique & $T \times m \times n \times k$ & $150 \times 30 \times 40 \times 84$ & $300 \times 50 \times 84 \times 84$ \\
+& & $= 15,120,000$ opérations & $= 105,840,000$ opérations \\
+\hline
+Temps d'exécution moyen & - & 15.2 secondes & 127.8 secondes \\
+Complexité par seconde & - & $\approx 995,000$ op/s & $\approx 828,000$ op/s \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Comparaison avec d'autres approches}
+
+\begin{table}[h!]
+\centering
+\caption{Comparaison des complexités algorithmiques}
+\label{tab:comparaison_complexite}
+\small
+\begin{tabularx}{\textwidth}{l c l}
+\toprule
+\textbf{Algorithme} & \textbf{Complexité} & \textbf{Avantages/Inconvénients} \\
+\midrule
+\textbf{ACO (notre approche)} & $O(T \times m \times n \times k)$ & - Exploration intelligente de l'espace \\
+& & - Équilibre exploration/exploitation \\
+& & - Adapté aux problèmes NP-difficiles \\
+\hline
+\textbf{Recherche exhaustive} & $O(k^n)$ & - Garantit l'optimum global \\
+& & - Impossible pour $n > 15$ \\
+& & - $84^{40} \approx 10^{77}$ opérations \\
+\hline
+\textbf{Algorithmes génétiques} & $O(T \times P \times n)$ & - Exploration parallèle \\
+& (P = taille population) & - Convergence parfois lente \\
+\hline
+\textbf{Programmation linéaire} & $O(n^3 \times k^3)$ & - Solution exacte \\
+& & - Très gourmand en mémoire \\
+\hline
+\textbf{Heuristiques gloutonnes} & $O(n \times k)$ & - Très rapide \\
+& & - Risque d'optimums locaux \\
+& & - Qualité solution variable \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Analyse de scalabilité}
+
+La figure suivante illustre l'évolution du temps d'exécution en fonction de la taille du problème :
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.8\textwidth,
+    height=6cm,
+    xlabel={Nombre de tâches ($n$)},
+    ylabel={Temps d'exécution (secondes)},
+    grid=both,
+    grid style={line width=.1pt, draw=gray!10},
+    major grid style={line width=.2pt,draw=gray!50},
+    legend pos=north west,
+    xmin=0, xmax=100,
+    ymin=0, ymax=140,
+    xtick={0,20,40,60,80,100},
+    ytick={0,20,40,60,80,100,120,140},
+    tick label style={font=\small},
+    label style={font=\small},
+    legend style={font=\small}
+]
+% Courbe théorique (quadratique en n, car n × k avec k fixe)
+\addplot[domain=0:100, samples=100, thick, unstimblue] {0.0095*x^2};
+\addlegendentry{$O(n^2)$ théorique}
+
+% Points de données
+\addplot[only marks, mark=*, mark size=3pt, ensgmmred]
+    coordinates {(40,15.2) (84,127.8)};
+\addlegendentry{Mesures expérimentales}
+
+% Ligne de tendance
+\addplot[domain=0:100, samples=100, dashed, neutral] {0.011*x^2};
+\end{axis}
+\end{tikzpicture}
+\caption{Scalabilité de l'algorithme ACO}
+\label{fig:scalabilite_aco}
+\end{figure}
+
+\paragraph{Observation} : La croissance du temps d'exécution suit approximativement une loi quadratique $O(n^2)$, ce qui correspond à la complexité théorique $O(n \times k)$ avec $k$ constant (84 slots). Pour $n$ allant jusqu'à 100 tâches, l'algorithme reste utilisable en temps réel (moins de 3 minutes).
+
+\section{Exécution et paramètres}
+
+\subsection{Paramètres ACO utilisés}
+
+Les paramètres ont été optimisés pour le problème de timetabling universitaire.
+
+\begin{table}[h!]
+\centering
+\caption{Paramètres de l'algorithme ACO}
+\label{tab:parametres_aco}
+\small
+\begin{tabularx}{\textwidth}{l c X}
+\toprule
+\textbf{Paramètre} & \textbf{Valeur} & \textbf{Description} \\
+\midrule
+$\alpha$ & 1 & Influence de la phéromone (exploitation) \\
+$\beta$ & 5 & Influence de l'heuristique (exploration) \\
+$\rho$ & 0.01 & Taux d'évaporation des phéromones \\
+$Q$ & 100 & Constante de dépôt de phéromone \\
+$\tau_{max}$ & 6 & Borne supérieure des phéromones (MMAS) \\
+$\tau_{min}$ & 0.01 & Borne inférieure des phéromones (MMAS) \\
+$m$ & 30 & Nombre de fourmis par itération \\
+$w_1$ & 1000 & Poids des conflits H1 (prioritaire) \\
+$w_2$ & 1 & Poids de l'équilibre de charge \\
+$w_3$ & 0.1 & Poids du gaspillage de capacité \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Critères d'arrêt}
+
+L'algorithme s'arrête lorsque :
+\begin{itemize}
+    \item Le nombre maximum d'itérations est atteint (150 itérations)
+    \item Une solution sans conflit ($f_1 = 0$) est trouvée
+    \item La solution ne s'améliore plus après 50 itérations consécutives
+\end{itemize}
+
+\section{Résultats obtenus}
+
+\subsection{Statistiques de convergence}
+
+L'algorithme converge rapidement vers une solution optimale. Les résultats montrent :
+
+\begin{table}[h!]
+\centering
+\caption{Statistiques de convergence}
+\label{tab:statistiques_convergence}
+\small
+\begin{tabularx}{\textwidth}{l c c}
+\toprule
+\textbf{Métrique} & \textbf{Valeur} & \textbf{Interprétation} \\
+\midrule
+Itérations totales & 150 & Maximum configuré \\
+Itérations pour $f_1=0$ & 1 & Convergence immédiate \\
+Meilleur coût $f(x)$ & 81.43 & Valeur minimale atteinte \\
+Conflits H1 ($f_1$) & 0 & Solution réalisable \\
+Équilibre ($f_2$) & 47.43 & Distribution acceptable \\
+Gaspillage ($f_3$) & 340.00 & 340 places vacantes totales \\
+Temps d'exécution & 15.2 sec & Sur machine standard \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Analyse de la fonction objectif}
+
+La fonction objectif présente les caractéristiques suivantes :
+
+\paragraph{Composante $f_1$ (conflits)} : Nulle dès la première itération, démontrant l'efficacité de l'heuristique pour éviter les affectations conflictuelles.
+
+\paragraph{Composante $f_2$ (équilibre)} : Valeur de 47.43 indiquant une répartition raisonnable des cours entre les salles, proche de l'idéal théorique.
+
+\paragraph{Composante $f_3$ (gaspillage)} : Valeur de 340 correspondant au gaspillage inévitable dû aux contraintes de compatibilité (ex: 27 étudiants dans amphithéâtre de 200 places).
+
+\subsection{Planning final généré}
+
+L'emploi du temps généré respecte toutes les contraintes hard :
+
+\begin{itemize}
+    \item \textbf{Aucun conflit étudiant} : Chaque classe n'a qu'un cours par créneau
+    \item \textbf{Compatibilité respectée} : Les cours GMM/GEP sont en salles TD, les ENSTP en amphithéâtres
+    \item \textbf{Capacités respectées} : Toutes les salles accueillent un nombre d'étudiants ≤ à leur capacité
+\end{itemize}
+
+\subsection{Occupation des salles}
+
+La répartition des cours entre les salles montre une bonne utilisation des ressources :
+
+\begin{table}[h!]
+\centering
+\caption{Répartition des cours par salle}
+\label{tab:repartition_salles}
+\small
+\begin{tabularx}{\textwidth}{l c c c}
+\toprule
+\textbf{Salle} & \textbf{Cours affectés} & \textbf{Occupation moyenne} & \textbf{Gaspillage moyen} \\
+\midrule
+TD-1 & 5 & 24.4 étudiants & 5.6 places \\
+TD-2 & 6 & 23.2 étudiants & 6.8 places \\
+TD-3 & 5 & 22.8 étudiants & 7.2 places \\
+TD-4 & 6 & 23.7 étudiants & 6.3 places \\
+SALLE-60 & 6 & 54.2 étudiants & 5.8 places \\
+AMPHI-100 & 6 & 68.3 étudiants & 31.7 places \\
+AMPHI-200 & 6 & 71.7 étudiants & 128.3 places \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Interprétation}
+
+Les résultats démontrent que :
+\begin{enumerate}
+    \item L'ACO trouve efficacement des solutions sans conflits pour des problèmes sous-contraints (47.6\% d'occupation)
+    \item L'heuristique combinée (capacité + conflits + charge) guide efficacement la construction des solutions
+    \item Le gaspillage reste acceptable malgré les contraintes de compatibilité strictes
+    \item L'algorithme converge rapidement, ce qui le rend adapté à des ajustements en temps réel
+\end{enumerate}
+
+\section{Export et visualisation}
+
+\subsection{Fichiers CSV générés}
+
+Le système génère trois fichiers CSV principaux :
+
+\begin{table}[h!]
+\centering
+\caption{Fichiers d'export générés}
+\label{tab:fichiers_export}
+\small
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\textbf{Fichier} & \textbf{Contenu} \\
+\midrule
+\texttt{emploi\_du\_temps.csv} & Planning complet avec toutes les affectations \\
+\texttt{pheromone\_matrix.csv} & Matrice finale des phéromones pour analyse \\
+\texttt{repartition\_charge.csv} & Statistiques d'occupation par salle \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Format des résultats}
+
+Les fichiers CSV suivent un format standard permettant une analyse facile avec divers outils :
+
+\paragraph{Format emploi du temps} : Chaque ligne contient : Jour, Période, Salle, Capacité, Classe, Matière, Effectif, Slot\_ID, Tâche\_ID.
+
+\paragraph{Format phéromones} : Matrice $n \times k$ avec les valeurs de phéromones finales pour chaque paire (tâche, slot).
+
+\paragraph{Format répartition} : Statistiques agrégées par salle : nombre de cours, occupation moyenne, gaspillage moyen.
+
+\begin{lstlisting}[
+    language=Python,
+    frame=lines,
+    framesep=2mm,
+    backgroundcolor=\color{gray!3},
+    basicstyle=\footnotesize\ttfamily,
+    caption={Exemple de ligne d'emploi du temps généré},
+    label=code:exemple_timetable
+]
+Jour,Période,Salle,Capacite,Classe,Matiere,Effectif,Slot_ID,Tache_ID
+L,Matin,TD-1,30,GMM-I1,Algèbre Linéaire I,27,TD-1_L_Matin,GMM-I1_Algèbre_Linéaire_I
+L,Aprem,AMPHI-100,100,ENSTP-L1,Mathématiques I,75,AMPHI-100_L_Aprem,ENSTP-L1_Mathématiques_I
+\end{lstlisting}
+
+\section{Discussion et perspectives}
+
+\subsection{Limites et défis identifiés}
+
+\paragraph{Complexité computationnelle} : Bien que polynomiale ($O(T \times m \times n \times k)$), l'algorithme peut devenir coûteux pour de très grandes instances (plusieurs centaines de tâches). Cependant, pour les tailles typiques de campus universitaires (50-200 cours), les performances restent acceptables.
+
+\paragraph{Gaspillage de capacité} : L'algorithme privilégie l'évitement des conflits au détriment de l'optimisation de l'occupation. Ceci est dû à la pondération élevée de $w_1$ (1000) par rapport à $w_3$ (0.1).
+
+\paragraph{Sensibilité aux paramètres} : Les performances de l'ACO dépendent du réglage des paramètres ($\alpha$, $\beta$, $\rho$). Une procédure d'auto-ajustement pourrait améliorer la robustesse.
+
+\paragraph{Contraintes pédagogiques avancées} : Notre modèle n'intègre pas certaines contraintes réalistes comme :
+\begin{itemize}
+    \item Les préférences horaires des enseignants
+    \item Les contraintes de suite logique entre cours
+    \item Les besoins en équipements spécialisés
+    \item Les distances entre salles pour les déplacements
+\end{itemize}
+
+\subsection{Perspectives d'amélioration}
+
+\paragraph{Hybridation avec d'autres métaheuristiques} :
+\begin{itemize}
+    \item Combiner l'ACO avec une recherche locale (Local Search) pour améliorer l'exploitation
+    \item Intégrer des éléments d'algorithmes génétiques pour diversifier la recherche
+    \item Utiliser le recuit simulé pour gérer l'acceptation de solutions temporairement moins bonnes
+\end{itemize}
+
+\paragraph{Optimisation multi-objectif} :
+\begin{itemize}
+    \item Transformer le problème en optimisation multi-objectif avec Pareto-optimalité
+    \item Utiliser des versions multi-colonies de l'ACO pour explorer différents compromis
+    \item Implémenter des mécanismes de partage de niche pour maintenir la diversité
+\end{itemize}
+
+\paragraph{Parallélisation} :
+\begin{itemize}
+    \item Exploiter le parallélisme naturel des fourmis (chaque fourmi peut être exécutée sur un cœur différent)
+    \item Implémenter une version MPI ou CUDA pour les très grandes instances
+    \item Utiliser des techniques de décomposition de problèmes (Divide and Conquer)
+\end{itemize}
+
+\paragraph{Interface utilisateur avancée} :
+\begin{itemize}
+    \item Développer une interface web interactive pour les planificateurs
+    \item Intégrer des visualisations en temps réel de la convergence
+    \item Permettre des ajustements manuels avec ré-optimisation incrémentale
+\end{itemize}
+
+\subsection{Applicabilité à d'autres contextes}
+
+L'approche développée est générique et peut être adaptée à divers problèmes d'ordonnancement :
+
+\begin{table}[h!]
+\centering
+\caption{Applications potentielles de l'approche}
+\label{tab:applications_potentielles}
+\small
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\textbf{Domaine} & \textbf{Adaptations nécessaires} \\
+\midrule
+Planning hospitalier & Contraintes de spécialité, urgences, rotations de personnel \\
+Ordonnancement industriel & Temps de setup, contraintes de maintenance, livraisons \\
+Gestion de projets & Dépendances entre tâches, ressources partagées, deadlines \\
+Transport scolaire & Capacités des bus, trajets optimaux, horaires élèves \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Conclusion du chapitre}
+
+Ce chapitre a présenté l'implémentation complète de l'algorithme ACO appliqué au problème de timetabling du campus de Sogbo-Aliho. L'analyse détaillée montre que :
+
+\begin{enumerate}
+    \item L'architecture modulaire permet une maintenance et une évolution faciles du code
+    \item La complexité algorithmique ($O(T \times m \times n \times k)$) est polynomiale et reste pratique pour les instances de taille réelle
+    \item Les résultats obtenus démontrent l'efficacité de l'approche pour trouver des solutions réalisables rapidement
+    \item L'algorithme offre un bon compromis entre qualité de solution et temps de calcul
+    \item L'approche est extensible et peut intégrer des contraintes supplémentaires
+\end{enumerate}
+
+Les perspectives d'amélioration identifiées ouvrent la voie à des développements futurs qui pourraient encore accroître l'efficacité et l'applicabilité de la méthode à des problèmes d'optimisation combinatoire plus larges.
+\begin{thebibliography}{99}
+
+\bibitem{dorigo1992}
+M. Dorigo, \textit{Optimization, Learning and Natural Algorithms} (en italien), Thèse de doctorat, Dipartimento di Elettronica, Politecnico di Milano, Italie, 1992.
+
+\bibitem{dorigo1996}
+M. Dorigo, V. Maniezzo, et A. Colorni, "Ant System: Optimization by a colony of cooperating agents," \textit{IEEE Transactions on Systems, Man, and Cybernetics--Part B}, vol. 26, no. 1, pp. 29-41, 1996.
+
+\bibitem{dorigo2004book}
+M. Dorigo et T. Stützle, \textit{Ant Colony Optimization}, MIT Press, Cambridge, MA, 2004.
+
+\bibitem{stutzle2000}
+T. Stützle et H. H. Hoos, "MAX-MIN Ant System," \textit{Future Generation Computer Systems}, vol. 16, no. 8, pp. 889-914, 2000.
+
+\bibitem{dorigo2006ieee}
+M. Dorigo, M. Birattari, et T. Stützle, "Ant Colony Optimization," \textit{IEEE Computational Intelligence Magazine}, vol. 1, no. 4, pp. 28-39, novembre 2006.
+
+\bibitem{socha2002}
+K. Socha, J. Knowles, et M. Sampels, "A MAX-MIN Ant System for the university course timetabling problem," in \textit{Proceedings of the 3rd International Workshop on Ant Algorithms (ANTS 2002)}, Springer LNCS vol. 2463, pp. 1-13, 2002.
+
+\bibitem{matijas2010}
+M. Matijas et M. Pavlić, "Ant colony optimization for the university timetabling problem," \textit{International Journal of Engineering Research and Applications}, vol. 1, no. 4, pp. 1990-1997, 2010.
+
+\bibitem{alaya2007}
+I. Alaya, C. Solnon, et K. Ghédira, "Optimisation par colonies de fourmis pour le problème du sac à dos multidimensionnel," \textit{Revue des Sciences et Technologies de l'Information - Série TSI : Technique et Science Informatiques}, vol. 26, no. 3-4, pp. 371-390, 2007.
+
+\bibitem{wilson1962}
+E. O. Wilson, "Chemical communication among workers of the fire ant \textit{Solenopsis saevissima} (Fr. Smith)," \textit{Animal Behaviour}, vol. 10, no. 1-2, pp. 134-164, 1962.
+
+\bibitem{goss1989}
+S. Goss, S. Aron, J. L. Deneubourg, et J. M. Pasteels, "Self-organized shortcuts in the Argentine ant," \textit{Naturwissenschaften}, vol. 76, pp. 579-581, 1989.
+
+\bibitem{morgan2009}
+E. D. Morgan, "Trail pheromones of ants," \textit{Physiological Entomology}, vol. 34, no. 1, pp. 1-17, 2009.
+
+\bibitem{deneubourg1990}
+J. L. Deneubourg, S. Aron, S. Goss, et J. M. Pasteels, "The self-organizing exploratory pattern of the Argentine ant," \textit{Journal of Insect Behavior}, vol. 3, no. 2, pp. 159-168, 1990.
+
+\bibitem{bonabeau2000}
+E. Bonabeau, M. Dorigo, et G. Theraulaz, "Inspiration for optimization from social insect behaviour," \textit{Nature}, vol. 406, pp. 39-42, juillet 2000.
+
+\bibitem{mazlan2019}
+M. Mazlan, M. Makhtar, A. F. K. Ahmad Khairi, et M. A. Mohamed, "University course timetabling model using ant colony optimization algorithm approach," \textit{Indonesian Journal of Electrical Engineering and Computer Science}, vol. 13, no. 1, pp. 72-76, janvier 2019.
+
+\bibitem{aslan2018}
+S. Aslan et C. Aci, "Solving University Course Timetabling Problem Using Ant Colony Optimization: An Example of Mersin University Engineering Faculty," in \textit{Proceedings of International Conference on Advanced Technologies, Computer Engineering and Science (ICATCES'18)}, Safranbolu, Turkey, pp. 154-157, mai 2018.
+
+\bibitem{lewis2008}
+R. Lewis, "A survey of metaheuristic-based techniques for University Timetabling problems," \textit{OR Spectrum}, vol. 30, no. 1, pp. 167-190, 2008.
+
+\end{thebibliography}
+
+\end{document}

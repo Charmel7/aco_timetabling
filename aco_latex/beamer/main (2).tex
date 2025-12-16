@@ -1,0 +1,1171 @@
+\documentclass[aspectratio=169,12pt]{beamer}
+
+% ============================================
+% PACKAGES ET CONFIGURATION
+% ============================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,shapes,positioning,shadows,calc}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{xcolor}
+
+% ============================================
+% THÈME FUTURISTE PERSONNALISÉ
+% ============================================
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Couleurs futuristes
+\definecolor{cyandark}{RGB}{0,150,200}
+\definecolor{cyanlight}{RGB}{100,200,255}
+\definecolor{violetdeep}{RGB}{75,0,130}
+\definecolor{violetlight}{RGB}{138,43,226}
+\definecolor{grisanthracite}{RGB}{40,40,45}
+\definecolor{grisclair}{RGB}{220,220,230}
+\definecolor{neonpink}{RGB}{255,0,127}
+\definecolor{neongreen}{RGB}{57,255,20}
+
+% Configuration des couleurs du thème
+\setbeamercolor{structure}{fg=cyandark}
+\setbeamercolor{palette primary}{bg=grisanthracite,fg=white}
+\setbeamercolor{palette secondary}{bg=violetdeep,fg=white}
+\setbeamercolor{palette tertiary}{bg=cyandark,fg=white}
+\setbeamercolor{palette quaternary}{bg=violetlight,fg=white}
+\setbeamercolor{frametitle}{bg=grisanthracite,fg=cyanlight}
+\setbeamercolor{title}{fg=cyanlight}
+\setbeamercolor{block title}{bg=cyandark,fg=white}
+\setbeamercolor{block body}{bg=grisclair,fg=black}
+\setbeamercolor{block title alerted}{bg=neonpink,fg=white}
+\setbeamercolor{block body alerted}{bg=grisclair,fg=black}
+\setbeamercolor{block title example}{bg=violetlight,fg=white}
+\setbeamercolor{block body example}{bg=grisclair,fg=black}
+
+% Police moderne
+\usefonttheme{professionalfonts}
+\setbeamerfont{title}{size=\huge,series=\bfseries}
+\setbeamerfont{frametitle}{size=\Large,series=\bfseries}
+\setbeamerfont{block title}{size=\large,series=\bfseries}
+
+% Templates personnalisés
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{sections/subsections in toc}[circle]
+
+% Fond avec dégradé subtil
+\setbeamertemplate{background}{
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[left color=white,right color=grisclair!30] 
+      (current page.south west) rectangle (current page.north east);
+  \end{tikzpicture}
+}
+
+% ============================================
+% INFORMATIONS DE LA PRÉSENTATION
+% ============================================
+\title[ACO pour Timetabling]{Exploration de l'Algorithme d'Optimisation\\par Colonies de Fourmis (ACO)}
+\subtitle{Gestion des Groupes Pédagogiques\\Campus de Sogbo-Aliho}
+\author{Groupe 2}
+\institute{
+  UNIVERSITÉ NATIONALE DES SCIENCES, TECHNOLOGIES,\\
+  INGÉNIERIE ET MATHÉMATIQUES (UNSTIM)\\
+  \vspace{0.3cm}
+  École Nationale Supérieure de Génie\\
+  Mathématique et Modélisation (ENSGMM)
+}
+\date{Année Académique 2025-2026}
+
+% ============================================
+% DÉBUT DU DOCUMENT
+% ============================================
+\begin{document}
+
+% ====== SLIDE 1 : PAGE DE TITRE ======
+\begin{frame}[plain]
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[left color=violetdeep,right color=cyandark] 
+      (current page.south west) rectangle (current page.north east);
+    \node[white,opacity=0.1] at (current page.center) 
+      {\includegraphics[width=0.5\paperwidth]{example-image}};
+  \end{tikzpicture}
+  \titlepage
+\end{frame}
+
+% ====== SLIDE 2 : CONTEXTE ======
+\begin{frame}{Contexte du Problème}
+  \begin{columns}[T]
+    \column{0.5\textwidth}
+    \begin{alertblock}{Défi Majeur}
+      Affectation optimale des classes aux salles sur le campus de Sogbo-Aliho
+    \end{alertblock}
+    
+    \vspace{0.5cm}
+    \textbf{Problématique :}
+    \begin{itemize}
+      \item Ensemble de classes avec emplois du temps
+      \item Salles avec capacités limitées
+      \item Minimiser les conflits temporels
+      \item Respecter contraintes de capacité
+    \end{itemize}
+    
+    \column{0.5\textwidth}
+    \begin{tikzpicture}[scale=0.8]
+      % Illustration schématique
+      \foreach \i in {1,2,3} {
+        \draw[fill=cyanlight!50,draw=cyandark,thick] 
+          (0,\i*1.2) rectangle (2,\i*1.2+0.8);
+        \node at (1,\i*1.2+0.4) {\footnotesize Classe \i};
+      }
+      \draw[->,ultra thick,violetlight] (2.5,2.4) -- (3.5,2.4);
+      \foreach \j in {1,2} {
+        \draw[fill=violetlight!50,draw=violetdeep,thick] 
+          (4,\j*1.5) rectangle (6,\j*1.5+1);
+        \node at (5,\j*1.5+0.5) {\footnotesize Salle \j};
+      }
+    \end{tikzpicture}
+  \end{columns}
+  
+  \vspace{0.5cm}
+  \begin{exampleblock}{Classification}
+    \textbf{University Timetabling Problem} — NP-difficile
+  \end{exampleblock}
+\end{frame}
+
+% ====== SLIDE 3 : PLAN ======
+\begin{frame}{Plan de la Présentation}
+  \tableofcontents
+\end{frame}
+
+% ============================================
+% SECTION 1 : PRINCIPE BIOLOGIQUE
+% ============================================
+\section{Principe Biologique des Fourmis}
+
+% ====== SLIDE 4 : COMPORTEMENT NATUREL ======
+\begin{frame}{Comportement Naturel des Fourmis}
+  \begin{columns}
+    \column{0.55\textwidth}
+    \begin{block}{Intelligence Collective}
+      Agents simples résolvant collectivement des problèmes complexes sans coordination centralisée
+    \end{block}
+    
+    \vspace{0.3cm}
+    \textbf{Mécanisme clé : La Phéromone}
+    \begin{itemize}
+      \item Substance chimique déposée sur le chemin
+      \item Sécrétée par glandes exocrines
+      \item Guide les autres fourmis
+      \item Crée une boucle de rétroaction positive
+    \end{itemize}
+    
+    \column{0.45\textwidth}
+    \begin{tikzpicture}[scale=0.9]
+      % Nid
+      \node[circle,fill=violetlight!70,minimum size=1cm] (nest) at (0,0) {\tiny Nid};
+      % Nourriture
+      \node[star,star points=5,fill=neongreen!70,minimum size=1cm] (food) at (6,0) {\tiny Food};
+      % Chemin avec phéromones
+      \draw[->,thick,cyandark,decorate,decoration={snake,amplitude=0.5mm}] 
+        (nest) to[bend left=30] node[above,sloped] {\tiny phéromone} (food);
+      \draw[->,thick,cyanlight] 
+        (nest) to[bend right=30] (food);
+      % Fourmis
+      \foreach \x in {1,2,...,5} {
+        \fill[black] (\x,{0.3*sin(\x*60)}) circle (1.5pt);
+      }
+    \end{tikzpicture}
+  \end{columns}
+\end{frame}
+
+% ====== SLIDE 5 : EXPÉRIENCE DU PONT DOUBLE ======
+\begin{frame}{L'Expérience du Pont Double (Goss et al., 1989)}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \textbf{Dispositif :}
+    \begin{itemize}
+      \item Colonie séparée de la nourriture
+      \item Deux branches de longueurs différentes
+    \end{itemize}
+    
+    \vspace{0.5cm}
+    \textbf{Phases observées :}
+    \begin{enumerate}
+      \item \textcolor{violetdeep}{Exploration aléatoire}
+      \item \textcolor{cyandark}{Accumulation sur branche courte}
+      \item \textcolor{neongreen}{Convergence vers l'optimum}
+    \end{enumerate}
+    
+    \column{0.5\textwidth}
+    \begin{tikzpicture}[scale=1]
+      \node[circle,fill=violetlight,minimum size=8mm] (A) at (0,0) {N};
+      \node[circle,fill=neongreen,minimum size=8mm] (B) at (5,0) {F};
+      
+      % Chemin long
+      \draw[thick,gray!40,line width=2pt] (A) to[bend left=40] 
+        node[above,sloped] {\tiny Chemin long} (B);
+      % Chemin court avec plus de phéromones
+      \draw[thick,cyandark,line width=5pt] (A) to[bend right=20] 
+        node[below,sloped] {\tiny Chemin court} (B);
+      
+      \node[below=0.5cm] at (2.5,-1) {\small Plus de passages $\Rightarrow$ Plus de phéromones};
+    \end{tikzpicture}
+  \end{columns}
+  
+  \vspace{0.5cm}
+  \begin{exampleblock}{Facteurs Clés}
+    \textbf{Évaporation} (oubli des mauvaises décisions) + \textbf{Comportement probabiliste} (exploration continue)
+  \end{exampleblock}
+\end{frame}
+
+% ====== SLIDE 6 : TRANSPOSITION ALGORITHMIQUE ======
+\begin{frame}{Transposition au Domaine Algorithmique}
+  \begin{center}
+    \begin{tikzpicture}[node distance=0.5cm]
+      % Colonne gauche : Système naturel
+      \node[fill=cyanlight!30,rounded corners,minimum width=5cm,minimum height=0.8cm] 
+        (h1) {\textbf{Système Naturel}};
+      \node[below=of h1,fill=grisclair,minimum width=5cm,minimum height=0.6cm] 
+        (n1) {Fourmi réelle};
+      \node[below=of n1,fill=grisclair,minimum width=5cm,minimum height=0.6cm] 
+        (n2) {Phéromone chimique};
+      \node[below=of n2,fill=grisclair,minimum width=5cm,minimum height=0.6cm] 
+        (n3) {Chemin physique};
+      \node[below=of n3,fill=grisclair,minimum width=5cm,minimum height=0.6cm] 
+        (n4) {Concentration};
+      \node[below=of n4,fill=grisclair,minimum width=5cm,minimum height=0.6cm] 
+        (n5) {Évaporation naturelle};
+      
+      % Colonne droite : Système artificiel
+      \node[fill=violetlight!30,rounded corners,minimum width=5cm,minimum height=0.8cm,right=2cm of h1] 
+        (h2) {\textbf{Système Artificiel}};
+      \node[below=of h2,fill=grisclair,minimum width=5cm,minimum height=0.6cm] 
+        (a1) {Fourmi artificielle (agent)};
+      \node[below=of a1,fill=grisclair,minimum width=5cm,minimum height=0.6cm] 
+        (a2) {Phéromone numérique ($\tau$)};
+      \node[below=of a2,fill=grisclair,minimum width=5cm,minimum height=0.6cm] 
+        (a3) {Solution candidate};
+      \node[below=of a3,fill=grisclair,minimum width=5cm,minimum height=0.6cm] 
+        (a4) {Qualité de la solution};
+      \node[below=of a4,fill=grisclair,minimum width=5cm,minimum height=0.6cm] 
+        (a5) {Facteur d'évaporation $\rho$};
+      
+      % Flèches
+      \foreach \i in {1,...,5} {
+        \draw[->,ultra thick,neonpink] (n\i.east) -- (a\i.west);
+      }
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+% ============================================
+% SECTION 2 : ALGORITHME ACO
+% ============================================
+\section{Description de l'Algorithme ACO}
+
+% ====== SLIDE 7 : STRUCTURE GÉNÉRALE ======
+\begin{frame}{Structure Générale de l'ACO}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{block}{Métaheuristique Itérative}
+      Population d'agents construisant des solutions de manière probabiliste
+    \end{block}
+    
+    \vspace{0.3cm}
+    \textbf{Composants essentiels :}
+    \begin{itemize}
+      \item Graphe de construction $G = (C, L)$
+      \item Phéromones $\tau_{ij}$
+      \item Information heuristique $\eta_{ij}$
+      \item Règle de transition probabiliste
+      \item Mise à jour des phéromones
+    \end{itemize}
+    
+    \column{0.5\textwidth}
+    \begin{tikzpicture}[scale=0.85,every node/.style={font=\footnotesize}]
+      \node[draw,rectangle,fill=cyandark!30,rounded corners,minimum width=3.5cm] 
+        (init) at (0,0) {Initialisation};
+      \node[draw,rectangle,fill=cyanlight!30,rounded corners,minimum width=3.5cm,below=0.5cm of init] 
+        (const) {Construction solutions};
+      \node[draw,rectangle,fill=violetlight!30,rounded corners,minimum width=3.5cm,below=0.5cm of const] 
+        (eval) {Évaluation};
+      \node[draw,rectangle,fill=neongreen!30,rounded corners,minimum width=3.5cm,below=0.5cm of eval] 
+        (update) {Mise à jour phéromones};
+      \node[draw,diamond,fill=neonpink!30,aspect=2,below=0.5cm of update] 
+        (stop) {Stop?};
+      \node[draw,rectangle,fill=violetdeep!30,rounded corners,text=white,below=0.5cm of stop] 
+        (result) {Meilleure solution};
+      
+      \draw[->,thick] (init) -- (const);
+      \draw[->,thick] (const) -- (eval);
+      \draw[->,thick] (eval) -- (update);
+      \draw[->,thick] (update) -- (stop);
+      \draw[->,thick] (stop) -- node[right] {Oui} (result);
+      \draw[->,thick] (stop.west) -- ++(-1,0) |- node[left,pos=0.25] {Non} (const.west);
+    \end{tikzpicture}
+  \end{columns}
+\end{frame}
+
+% ====== SLIDE 8 : RÈGLE DE TRANSITION ======
+\begin{frame}{Règle de Transition Probabiliste}
+  \begin{alertblock}{Formule Fondamentale}
+    La probabilité qu'une fourmi $k$ affecte la classe $i$ à la salle $j$ :
+    \[
+      p^k_{ij} = \frac{[\tau_{ij}]^\alpha \cdot [\eta_{ij}]^\beta}{\sum_{l \in N^k_i} [\tau_{il}]^\alpha \cdot [\eta_{il}]^\beta}
+    \]
+  \end{alertblock}
+  
+  \vspace{0.5cm}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{block}{Paramètres}
+      \begin{itemize}
+        \item $\alpha$ : influence phéromone
+        \item $\beta$ : influence heuristique
+        \item $N^k_i$ : salles compatibles
+      \end{itemize}
+    \end{block}
+    
+    \column{0.5\textwidth}
+    \begin{exampleblock}{Équilibre}
+      \begin{itemize}
+        \item $\alpha$ élevé $\Rightarrow$ \textbf{exploitation}
+        \item $\beta$ élevé $\Rightarrow$ \textbf{glouton}
+        \item Équilibre optimal crucial
+      \end{itemize}
+    \end{exampleblock}
+  \end{columns}
+\end{frame}
+
+% ====== SLIDE 9 : MISE À JOUR PHÉROMONES ======
+\begin{frame}{Mise à Jour des Phéromones}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \textbf{1. Évaporation}
+    \[
+      \tau_{ij} \leftarrow (1-\rho) \cdot \tau_{ij}
+    \]
+    \begin{itemize}
+      \item $\rho \in (0,1]$ : taux d'évaporation
+      \item Oublie les mauvaises décisions
+      \item Évite la stagnation
+    \end{itemize}
+    
+    \vspace{0.5cm}
+    \textbf{2. Dépôt}
+    \[
+      \tau_{ij} \leftarrow \tau_{ij} + \Delta\tau^{best}_{ij}
+    \]
+    \begin{itemize}
+      \item Seule la meilleure fourmi dépose
+      \item Renforce les bonnes solutions
+    \end{itemize}
+    
+    \column{0.5\textwidth}
+    \begin{block}{MAX-MIN Ant System}
+      Amélioration de l'ACO classique :
+      \[
+        \tau_{ij} = \max\{\tau_{min}, \min\{\tau_{max}, \tau_{ij}\}\}
+      \]
+    \end{block}
+    
+    \vspace{0.3cm}
+    \begin{tikzpicture}[scale=0.9]
+      \draw[->,thick] (0,0) -- (5,0) node[right] {Itérations};
+      \draw[->,thick] (0,0) -- (0,3) node[above] {$\tau$};
+      \draw[thick,neonpink] (0,2.5) -- (5,2.5) node[right] {$\tau_{max}$};
+      \draw[thick,cyandark] (0,0.5) -- (5,0.5) node[right] {$\tau_{min}$};
+      \draw[thick,violetlight,decorate,decoration={snake,amplitude=1mm}] 
+        (0,1.5) -- (5,1.8);
+      \node[below] at (2.5,-0.3) {\footnotesize Évolution contrôlée};
+    \end{tikzpicture}
+  \end{columns}
+\end{frame}
+
+% ============================================
+% SECTION 3 : MODÉLISATION MATHÉMATIQUE
+% ============================================
+\section{Modélisation Mathématique}
+
+% ====== SLIDE 10 : DÉFINITION FORMELLE ======
+\begin{frame}{Définition Formelle du Problème}
+  \begin{block}{Données}
+    \begin{itemize}
+      \item Classes : $C = \{c_1, c_2, \ldots, c_n\}$
+      \item Salles : $R = \{r_1, r_2, \ldots, r_k\}$ avec $k < n$
+    \end{itemize}
+  \end{block}
+  
+  \begin{alertblock}{Variables de Décision}
+    \[
+      x_{ij} = \begin{cases}
+        1 & \text{si classe } c_i \text{ affectée à salle } r_j \\
+        0 & \text{sinon}
+      \end{cases}
+    \]
+    Problème d'optimisation \textbf{discret} : $x_{ij} \in \{0,1\}$
+  \end{alertblock}
+  
+  \begin{exampleblock}{Paramètres}
+    \begin{itemize}
+      \item $E_i$ : effectif classe $i$
+      \item $Cap_j$ : capacité salle $j$
+      \item $T_i$ : créneaux horaires classe $i$
+      \item $comp_{ij}$ : compatibilité classe-salle
+    \end{itemize}
+  \end{exampleblock}
+\end{frame}
+
+% ====== SLIDE 11 : FONCTION OBJECTIF ======
+\begin{frame}{Fonction Objectif}
+  \begin{alertblock}{Objectif Principal : Minimiser les Conflits}
+    \[
+      f_1(x) = \sum_{j=1}^k \sum_{i=1}^n \sum_{h=i+1}^n x_{ij} \cdot x_{hj} \cdot \text{conflict}(c_i, c_h)
+    \]
+    où $\text{conflict}(c_i, c_h) = 1$ si $T_i \cap T_h \neq \emptyset$
+  \end{alertblock}
+  
+  \vspace{0.3cm}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \textbf{Critères Secondaires :}
+    \begin{itemize}
+      \item $f_2(x)$ : équilibre charge
+      \item $f_3(x)$ : taux d'occupation
+    \end{itemize}
+    
+    \column{0.5\textwidth}
+    \begin{block}{Fonction Globale}
+      \[
+        f(x) = w_1 f_1 + w_2 f_2 + w_3 f_3
+      \]
+      avec $w_1 \gg w_2, w_3$
+    \end{block}
+  \end{columns}
+  
+  \vspace{0.3cm}
+  \begin{exampleblock}{Nature du Problème}
+    Fonction objectif \textbf{continue} avec variables \textbf{discrètes} $\Rightarrow$ Optimisation combinatoire
+  \end{exampleblock}
+\end{frame}
+
+% ====== SLIDE 12 : CONTRAINTES ======
+\begin{frame}{Contraintes du Problème}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{alertblock}{Contraintes HARD}
+      \textbf{Obligatoires} — ne peuvent être violées
+      \begin{enumerate}
+        \item Unicité d'affectation\\
+        $\sum_{j=1}^k x_{ij} = 1 \quad \forall i$
+        
+        \item Respect capacité\\
+        $x_{ij}(E_i - Cap_j) \leq 0$
+        
+        \item Compatibilité\\
+        $x_{ij} \leq comp_{ij}$
+        
+        \item Non-double occupation
+      \end{enumerate}
+    \end{alertblock}
+    
+    \column{0.5\textwidth}
+    \begin{block}{Contraintes SOFT}
+      \textbf{Préférences} — améliorent la qualité
+      \begin{itemize}
+        \item Limitation journalière
+        \item Éviter séquences longues
+        \item Éviter dernière période
+        \item Préférences enseignants
+        \item Équilibrage charge
+      \end{itemize}
+      
+      \vspace{0.3cm}
+      Fonction de pénalité :
+      \[
+        \text{penalty}(x) = \sum_i w_{S_i} \cdot v_{S_i}(x)
+      \]
+    \end{block}
+  \end{columns}
+\end{frame}
+
+% ====== SLIDE 13 : COMPLEXITÉ ======
+\begin{frame}{Complexité du Problème}
+  \begin{alertblock}{Nature NP-Difficile}
+    Le problème de timetabling universitaire est \textbf{NP-difficile}
+    \begin{itemize}
+      \item Réductible au problème de coloration de graphes (NP-complet)
+      \item Espace de recherche : $k^n$ solutions possibles
+    \end{itemize}
+  \end{alertblock}
+  
+  \vspace{0.5cm}
+  \begin{exampleblock}{Exemple Numérique}
+    Pour $n = 30$ classes et $k = 10$ salles :
+    \[
+      10^{30} \text{ solutions possibles} \approx 10^9 \text{ fois l'âge de l'univers en secondes!}
+    \]
+    $\Rightarrow$ Énumération exhaustive \textbf{impossible}
+  \end{exampleblock}
+  
+  \vspace{0.5cm}
+  \begin{block}{Justification de l'Approche Métaheuristique}
+    Les métaheuristiques comme l'ACO offrent un compromis efficace entre \textbf{qualité} et \textbf{temps de calcul}
+  \end{block}
+\end{frame}
+
+% ============================================
+% SECTION 4 : ADAPTATION AU TIMETABLING
+% ============================================
+\section{Adaptation de l'ACO au Timetabling}
+
+% ====== SLIDE 14 : INFORMATION HEURISTIQUE ======
+\begin{frame}{Information Heuristique Adaptée}
+  \begin{block}{Composantes Heuristiques}
+    L'information $\eta_{ij}$ guide vers des affectations localement bonnes :
+  \end{block}
+  
+  \begin{columns}
+    \column{0.5\textwidth}
+    \textbf{1. Heuristique de capacité}
+    \[
+      \eta^{cap}_{ij} = \frac{1}{1 + |Cap_j - E_i|}
+    \]
+    
+    \textbf{2. Heuristique de conflit}
+    \[
+      \eta^{conf}_{ij} = \frac{1}{1 + \sum_{c_h \in S^k_j} \text{conflict}(c_i, c_h)}
+    \]
+    
+    \column{0.5\textwidth}
+    \textbf{3. Heuristique de charge}
+    \[
+      \eta^{load}_{ij} = \frac{1}{1 + |S^k_j|}
+    \]
+    
+    \textbf{4. Heuristique combinée}
+    \[
+      \eta_{ij} = \eta^{cap}_{ij} \cdot (\eta^{conf}_{ij})^2 \cdot \eta^{load}_{ij}
+    \]
+  \end{columns}
+  
+  \vspace{0.5cm}
+  \begin{exampleblock}{Enrichissement}
+    Intégration des disponibilités enseignants : $\eta_{ij} \cdot \eta^{avail}_{ij}$
+  \end{exampleblock}
+\end{frame}
+
+% ====== SLIDE 15 : FORMULE ACO ENRICHIE ======
+\begin{frame}{Formule ACO Enrichie pour le Timetabling}
+  \begin{alertblock}{Règle de Transition Complète}
+    \[
+      p^k_{ij} = \frac{[\tau_{ij}]^\alpha \cdot [\eta_{ij}]^\beta \cdot [\mu_j]^\theta \cdot [\lambda_j]^\delta \cdot [\nu_{jh}]^\gamma}{\sum_{l \in N^k_i} [\tau_{il}]^\alpha \cdot [\eta_{il}]^\beta \cdot [\mu_l]^\theta \cdot [\lambda_l]^\delta \cdot [\nu_{lh}]^\gamma}
+    \]
+  \end{alertblock}
+  
+  \vspace{0.5cm}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \textbf{Paramètres additionnels :}
+    \begin{itemize}
+      \item $\mu_j$ : heures théoriques cours
+      \item $\lambda_j$ : disponibilité hebdo enseignant
+      \item $\nu_{jh}$ : disponibilité créneau $h$
+    \end{itemize}
+    
+    \column{0.5\textwidth}
+    \textbf{Exposants de contrôle :}
+    \begin{itemize}
+      \item $\theta, \delta, \gamma$ : importance relative
+      \item Permet d'intégrer préférences
+    \end{itemize}
+  \end{columns}
+  
+  \vspace{0.5cm}
+  \begin{exampleblock}{Avantage}
+    Formulation complète prenant en compte contraintes \textbf{ET} préférences
+  \end{exampleblock}
+\end{frame}
+
+% ====== SLIDE 16 : SÉLECTION PAR ROULETTE ======
+\begin{frame}{Méthode de Sélection par Roulette}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{block}{Principe}
+      Sélection proportionnelle aux probabilités $p_i$
+      \begin{enumerate}
+        \item Calculer probabilités cumulatives
+        \item Générer $r \in [0,1]$
+        \item Sélectionner $j$ tel que $P_{j-1} < r \leq P_j$
+      \end{enumerate}
+    \end{block}
+    
+    \vspace{0.3cm}
+    \begin{exampleblock}{Propriété}
+      Garantit exploration \textbf{stochastique} de l'espace de recherche
+    \end{exampleblock}
+    
+    \column{0.5\textwidth}
+    \begin{tikzpicture}[scale=1]
+      % Cercle de roulette
+      \draw[thick,fill=grisclair] (0,0) circle (2);
+      
+      % Secteurs avec différentes tailles
+      \fill[cyanlight] (0,0) -- (2,0) arc (0:120:2) -- cycle;
+      \fill[violetlight] (0,0) -- (120:2) arc (120:200:2) -- cycle;
+      \fill[neongreen!50] (0,0) -- (200:2) arc (200:280:2) -- cycle;
+      \fill[neonpink!50] (0,0) -- (280:2) arc (280:360:2) -- cycle;
+      
+      % Labels
+      \node at (60:1.3) {$p_1$};
+      \node at (160:1.3) {$p_2$};
+      \node at (240:1.3) {$p_3$};
+      \node at (320:1.3) {$p_4$};
+      
+      % Flèche de sélection
+      \draw[->,ultra thick,red] (0,0) -- (50:2.5);
+      \node[red] at (50:3) {$r$};
+    \end{tikzpicture}
+  \end{columns}
+\end{frame}
+
+% ====== SLIDE 17 : ALGORITHME ACO ADAPTÉ ======
+\begin{frame}[fragile]{Algorithme ACO Adapté - Vue d'Ensemble}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{block}{Phase d'Initialisation}
+      \begin{itemize}
+        \item $\tau_{ij} \leftarrow \tau_{max}$
+        \item $S_{best} \leftarrow \emptyset$
+        \item $f_{best} \leftarrow +\infty$
+      \end{itemize}
+    \end{block}
+    
+    \begin{alertblock}{Boucle Principale}
+      Pour chaque fourmi :
+      \begin{enumerate}
+        \item Construire solution $S^{ant}$
+        \item Évaluer $f(S^{ant})$
+        \item Mettre à jour si meilleure
+      \end{enumerate}
+    \end{alertblock}
+    
+    \column{0.5\textwidth}
+    \begin{block}{Construction Solution}
+      \begin{itemize}
+        \item Parcourir toutes les classes
+        \item Identifier salles compatibles
+        \item Calculer heuristiques
+        \item Sélectionner par roulette
+      \end{itemize}
+    \end{block}
+    
+    \begin{exampleblock}{Mise à Jour}
+      \begin{itemize}
+        \item Évaporation globale
+        \item Dépôt meilleure fourmi
+        \item Bornes MAX-MIN
+      \end{itemize}
+    \end{exampleblock}
+  \end{columns}
+  
+  \vspace{0.5cm}
+  \centering
+  \textbf{Complexité :} $\mathcal{O}(T \cdot m \cdot n \cdot (k+n))$
+\end{frame}
+
+% ====== SLIDE 18 : PARAMÈTRES RECOMMANDÉS ======
+\begin{frame}{Paramètres Recommandés}
+  \begin{center}
+    \begin{tabular}{lcc}
+      \toprule
+      \textbf{Paramètre} & \textbf{Valeur} & \textbf{Rôle} \\
+      \midrule
+      \rowcolor{grisclair}
+      $\alpha$ & 1 & Influence phéromone \\
+      $\beta$ & 5 & Influence heuristique (priorité) \\
+      \rowcolor{grisclair}
+      $\rho$ & 0.01 & Taux d'évaporation (exploration) \\
+      $m$ & 30 & Nombre de fourmis \\
+      \rowcolor{grisclair}
+      $Q$ & 100 & Constante de dépôt \\
+      $\tau_{min}$ & 0.01 & Borne inférieure MAX-MIN \\
+      \rowcolor{grisclair}
+      $\tau_{max}$ & 6 & Borne supérieure MAX-MIN \\
+      \midrule
+      \rowcolor{cyanlight!30}
+      $w_1$ & 1000 & \textbf{Poids conflits (prioritaire)} \\
+      \rowcolor{grisclair}
+      $w_2$ & 1 & Poids équilibre \\
+      $w_3$ & 0.1 & Poids occupation \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  
+  \vspace{0.5cm}
+  \begin{block}{Justification}
+    $\beta = 5$ : privilégie fortement l'évitement des conflits\\
+    $\rho = 0.01$ : faible évaporation favorise l'exploration
+  \end{block}
+\end{frame}
+
+% ====== SLIDE 19 : COMPLEXITÉ ALGORITHMIQUE ======
+\begin{frame}{Complexité Algorithmique}
+  \begin{block}{Complexité d'une Itération}
+    \textbf{Pour chaque fourmi :}
+    \begin{itemize}
+      \item Construction : $\mathcal{O}(n \cdot k)$
+      \item Évaluation conflits : $\mathcal{O}(n^2)$ pire cas
+    \end{itemize}
+    
+    \textbf{Pour $m$ fourmis :} $\mathcal{O}(m \cdot n \cdot (k+n))$
+  \end{block}
+  
+  \vspace{0.3cm}
+  \begin{alertblock}{Complexité Totale}
+    Pour $T$ itérations : $\mathcal{O}(T \cdot m \cdot n \cdot (k+n))$
+  \end{alertblock}
+  
+  \vspace{0.5cm}
+  \begin{exampleblock}{Exemple Numérique Concret}
+    \begin{itemize}
+      \item $n = 30$ classes, $k = 10$ salles
+      \item $m = 30$ fourmis, $T = 1000$ itérations
+      \item $1000 \times 30 \times 30 \times 40 \approx 3.6 \times 10^7$ opérations
+      \item \textbf{Temps estimé :} quelques dizaines de secondes
+    \end{itemize}
+  \end{exampleblock}
+\end{frame}
+
+% ============================================
+% SECTION 5 : REPRÉSENTATION GRAPHIQUE
+% ============================================
+\section{Représentation et Visualisation}
+
+% ====== SLIDE 20 : GRAPHE DE CONSTRUCTION ======
+\begin{frame}{Représentation Graphique du Problème}
+  \begin{columns}
+    \column{0.45\textwidth}
+    \begin{block}{Graphe Biparti}
+      $G = (C \cup R, E)$
+      \begin{itemize}
+        \item $C$ : classes
+        \item $R$ : salles
+        \item $E$ : affectations possibles
+      \end{itemize}
+    \end{block}
+    
+    \vspace{0.3cm}
+    \begin{alertblock}{Phéromones}
+      $\tau_{ij}$ sur les arêtes représente la désirabilité d'affecter $c_i$ à $r_j$
+    \end{alertblock}
+    
+    \column{0.55\textwidth}
+    \begin{tikzpicture}[scale=0.85]
+      % Classes (gauche)
+      \foreach \i in {1,2,3,4} {
+        \node[circle,draw=cyandark,fill=cyanlight!50,minimum size=8mm] 
+          (c\i) at (0,-\i*1.2) {$c_\i$};
+      }
+      \node[above] at (0,0) {\textbf{Classes}};
+      
+      % Salles (droite)
+      \foreach \j in {1,2,3} {
+        \node[rectangle,draw=violetdeep,fill=violetlight!50,minimum size=8mm,rounded corners] 
+          (r\j) at (5,-\j*1.5) {$r_\j$};
+      }
+      \node[above] at (5,0) {\textbf{Salles}};
+      
+      % Arêtes avec phéromones (épaisseur variable)
+      \draw[thick,opacity=0.6] (c1) -- (r1);
+      \draw[ultra thick,cyandark] (c1) -- (r2);
+      \draw[thick,opacity=0.4] (c2) -- (r1);
+      \draw[very thick,violetlight] (c2) -- (r3);
+      \draw[ultra thick,neongreen] (c3) -- (r1);
+      \draw[thick,opacity=0.5] (c3) -- (r2);
+      \draw[thick,opacity=0.6] (c4) -- (r2);
+      \draw[very thick,neonpink] (c4) -- (r3);
+      
+      \node[below,font=\footnotesize] at (2.5,-5.5) 
+        {Épaisseur $\propto \tau_{ij}$};
+    \end{tikzpicture}
+  \end{columns}
+\end{frame}
+
+% ====== SLIDE 21 : ILLUSTRATION CONSTRUCTION SOLUTION ======
+\begin{frame}{Illustration : Construction d'une Solution}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.9]
+      % Titre étapes
+      \node[font=\small] at (0,3.5) {\textbf{Étape 1}};
+      \node[font=\small] at (5,3.5) {\textbf{Étape 2}};
+      \node[font=\small] at (10,3.5) {\textbf{Étape 3}};
+      
+      % Étape 1
+      \node[circle,fill=cyanlight,minimum size=1cm] (c1a) at (0,2) {$c_1$};
+      \node[rectangle,fill=violetlight!30,minimum size=1cm,rounded corners] (r1a) at (1.5,2.5) {$r_1$};
+      \node[rectangle,fill=violetlight!30,minimum size=1cm,rounded corners] (r2a) at (1.5,1.5) {$r_2$};
+      \draw[->,ultra thick,neongreen] (c1a) -- (r1a);
+      
+      % Étape 2
+      \node[circle,fill=cyanlight,minimum size=1cm] (c2b) at (5,2) {$c_2$};
+      \node[rectangle,fill=violetlight!30,minimum size=1cm,rounded corners] (r1b) at (6.5,2.5) {$r_1$};
+      \node[rectangle,fill=violetlight!30,minimum size=1cm,rounded corners] (r2b) at (6.5,1.5) {$r_2$};
+      \draw[->,thick,opacity=0.3] (c2b) -- (r1b);
+      \draw[->,ultra thick,neonpink] (c2b) -- (r2b);
+      
+      % Étape 3
+      \node[circle,fill=cyanlight,minimum size=1cm] (c3c) at (10,2) {$c_3$};
+      \node[rectangle,fill=violetlight!30,minimum size=1cm,rounded corners] (r1c) at (11.5,2.5) {$r_1$};
+      \node[rectangle,fill=violetlight!30,minimum size=1cm,rounded corners] (r2c) at (11.5,1.5) {$r_2$};
+      \draw[->,ultra thick,cyandark] (c3c) -- (r1c);
+      
+      % Légende
+      \node[below,font=\footnotesize] at (5,0.5) 
+        {La fourmi construit progressivement une affectation complète};
+    \end{tikzpicture}
+  \end{center}
+  
+  \vspace{0.3cm}
+  \begin{block}{Mécanisme}
+    À chaque étape, la fourmi sélectionne la salle selon $p^k_{ij}$ (phéromones + heuristiques)
+  \end{block}
+\end{frame}
+
+% ============================================
+% SECTION 6 : APPLICATION ET RÉSULTATS
+% ============================================
+\section{Application au Campus de Sogbo-Aliho}
+
+% ====== SLIDE 22 : CAS D'ÉTUDE ======
+\begin{frame}{Cas d'Étude : Campus de Sogbo-Aliho}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{block}{Contexte}
+      \begin{itemize}
+        \item Institution d'enseignement supérieur
+        \item Multiples départements
+        \item Ressources limitées
+        \item Contraintes complexes
+      \end{itemize}
+    \end{block}
+    
+    \vspace{0.3cm}
+    \begin{alertblock}{Défis Spécifiques}
+      \begin{itemize}
+        \item Emplois du temps variables
+        \item Capacités hétérogènes
+        \item Équipements spécialisés
+        \item Préférences enseignants
+      \end{itemize}
+    \end{alertblock}
+    
+    \column{0.5\textwidth}
+    \begin{exampleblock}{Objectifs}
+      \begin{enumerate}
+        \item Zéro conflit temporel
+        \item Utilisation optimale salles
+        \item Satisfaction enseignants
+        \item Équilibrage charge
+      \end{enumerate}
+    \end{exampleblock}
+    
+    \vspace{0.3cm}
+    \begin{tikzpicture}[scale=0.8]
+      % Schéma campus simplifié
+      \draw[fill=grisclair,rounded corners] (0,0) rectangle (4,2);
+      \node at (2,1.5) {\textbf{Campus Sogbo-Aliho}};
+      \foreach \x in {0.5,1.5,2.5,3.5} {
+        \draw[fill=violetlight!30] (\x,0.2) rectangle (\x+0.6,0.8);
+      }
+      \node[below,font=\footnotesize] at (2,-0.3) {Salles à optimiser};
+    \end{tikzpicture}
+  \end{columns}
+\end{frame}
+
+% ====== SLIDE 23 : AVANTAGES DE L'APPROCHE ======
+\begin{frame}{Avantages de l'Approche ACO}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{block}{Flexibilité}
+      \begin{itemize}
+        \item Adaptation facile aux nouvelles contraintes
+        \item Modification simple des poids
+        \item Intégration de préférences
+      \end{itemize}
+    \end{block}
+    
+    \vspace{0.3cm}
+    \begin{exampleblock}{Performance}
+      \begin{itemize}
+        \item Solutions de qualité
+        \item Temps de calcul raisonnable
+        \item Scalabilité
+      \end{itemize}
+    \end{exampleblock}
+    
+    \column{0.5\textwidth}
+    \begin{alertblock}{Équilibre Optimal}
+      \begin{tikzpicture}[scale=0.9]
+        \draw[->,thick] (0,0) -- (4,0) node[right] {Temps};
+        \draw[->,thick] (0,0) -- (0,3) node[above] {Qualité};
+        
+        % Courbe ACO
+        \draw[ultra thick,cyandark] (0,0.5) .. controls (1,2) and (2,2.5) .. (4,2.8);
+        \node[cyandark,right] at (4,2.8) {ACO};
+        
+        % Méthode exacte
+        \draw[thick,neonpink,dashed] (0,0.5) -- (3.5,3);
+        \node[neonpink,above] at (3.5,3) {Exacte};
+        
+        % Glouton
+        \draw[thick,gray,dotted] (0,0.5) -- (1,1.2) -- (4,1.2);
+        \node[gray,right] at (4,1.2) {Glouton};
+      \end{tikzpicture}
+    \end{alertblock}
+  \end{columns}
+  
+  \vspace{0.5cm}
+  \begin{block}{Robustesse}
+    L'ACO évite les optimums locaux grâce au mécanisme d'évaporation et à l'exploration stochastique
+  \end{block}
+\end{frame}
+
+% ====== SLIDE 24 : RÉSULTATS ATTENDUS ======
+\begin{frame}{Résultats Attendus et Métriques}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{alertblock}{Métriques Principales}
+      \begin{enumerate}
+        \item \textbf{Nombre de conflits}
+        \[
+          f_1(x) = \sum \text{conflits}
+        \]
+        
+        \item \textbf{Taux d'occupation}
+        \[
+          \text{Occupation} = \frac{\sum E_i}{\sum Cap_j}
+        \]
+        
+        \item \textbf{Équilibre charge}
+        \[
+          \sigma = \sqrt{\frac{1}{k}\sum(n_j - \bar{n})^2}
+        \]
+      \end{enumerate}
+    \end{alertblock}
+    
+    \column{0.5\textwidth}
+    \begin{block}{Critères de Succès}
+      \begin{itemize}
+        \item Zéro conflit hard
+        \item Minimisation conflits soft
+        \item Convergence rapide
+        \item Stabilité solution
+      \end{itemize}
+    \end{block}
+    
+    \vspace{0.3cm}
+    \begin{exampleblock}{Comparaison}
+      Performance ACO vs :
+      \begin{itemize}
+        \item Algorithmes génétiques
+        \item Recuit simulé
+        \item Recherche taboue
+        \item Méthodes exactes
+      \end{itemize}
+    \end{exampleblock}
+  \end{columns}
+\end{frame}
+
+% ============================================
+% SECTION 7 : CONCLUSION
+% ============================================
+\section{Conclusion et Perspectives}
+
+% ====== SLIDE 25 : SYNTHÈSE ======
+\begin{frame}{Synthèse de l'Étude}
+  \begin{block}{Contributions Principales}
+    \begin{enumerate}
+      \item \textbf{Modélisation mathématique formelle} du problème de timetabling
+      \item \textbf{Adaptation de l'ACO} avec heuristiques spécialisées
+      \item \textbf{Intégration} contraintes hard et soft
+      \item \textbf{Prise en compte} des disponibilités enseignants
+    \end{enumerate}
+  \end{block}
+  
+  \vspace{0.5cm}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{alertblock}{Points Forts}
+      \begin{itemize}
+        \item Approche métaheuristique efficace
+        \item Équilibre exploitation/exploration
+        \item Flexibilité et adaptabilité
+        \item Complexité maîtrisée
+      \end{itemize}
+    \end{alertblock}
+    
+    \column{0.5\textwidth}
+    \begin{exampleblock}{Validation}
+      \begin{itemize}
+        \item Fondements biologiques solides
+        \item Littérature académique riche
+        \item Applications réussies
+        \item Résultats prometteurs
+      \end{itemize}
+    \end{exampleblock}
+  \end{columns}
+\end{frame}
+
+% ====== SLIDE 26 : PERSPECTIVES ======
+\begin{frame}{Perspectives et Développements Futurs}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{block}{Améliorations Algorithmiques}
+      \begin{itemize}
+        \item Hybridation avec recherche locale
+        \item Parallélisation du calcul
+        \item Apprentissage adaptatif paramètres
+        \item Mécanismes de diversification
+      \end{itemize}
+    \end{block}
+    
+    \vspace{0.3cm}
+    \begin{alertblock}{Extensions du Modèle}
+      \begin{itemize}
+        \item Multi-objectif (Pareto)
+        \item Contraintes dynamiques
+        \item Planification multi-semestre
+        \item Optimisation énergétique
+      \end{itemize}
+    \end{alertblock}
+    
+    \column{0.5\textwidth}
+    \begin{exampleblock}{Applications}
+      \begin{itemize}
+        \item Déploiement campus UNSTIM
+        \item Interface utilisateur graphique
+        \item Système d'aide à la décision
+        \item Intégration SI existant
+      \end{itemize}
+    \end{exampleblock}
+    
+    \vspace{0.3cm}
+    \begin{block}{Recherche Future}
+      \begin{itemize}
+        \item Analyse comparative approfondie
+        \item Étude de sensibilité paramètres
+        \item Validation sur benchmarks
+        \item Publication résultats
+      \end{itemize}
+    \end{block}
+  \end{columns}
+\end{frame}
+
+% ====== SLIDE 27 : RÉFÉRENCES CLÉS ======
+\begin{frame}{Références Bibliographiques Clés}
+  \begin{block}{Fondements de l'ACO}
+    \begin{itemize}
+      \item \textbf{Dorigo et al.} (1992, 1996) — Ant System original
+      \item \textbf{Dorigo \& Stützle} (2004) — Ouvrage de référence
+      \item \textbf{Stützle \& Hoos} (2000) — MAX-MIN Ant System
+    \end{itemize}
+  \end{block}
+  
+  \begin{block}{Applications au Timetabling}
+    \begin{itemize}
+      \item \textbf{Socha et al.} (2002) — MMAS pour timetabling universitaire
+      \item \textbf{Mazlan et al.} (2019) — Modèle ACO avec contraintes
+      \item \textbf{Aslan \& Aci} (2018) — Intégration disponibilités
+    \end{itemize}
+  \end{block}
+  
+  \begin{block}{Biologie et Éthologie}
+    \begin{itemize}
+      \item \textbf{Goss et al.} (1989) — Expérience du pont double
+      \item \textbf{Bonabeau et al.} (2000) — Comportement insectes sociaux
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+% ====== SLIDE 28 : CONCLUSION FINALE ======
+\begin{frame}[plain]
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[left color=cyandark,right color=violetdeep] 
+      (current page.south west) rectangle (current page.north east);
+  \end{tikzpicture}
+  
+  \vspace{2cm}
+  \begin{center}
+    {\Huge\textcolor{white}{\textbf{Merci de Votre Attention}}}
+    
+    \vspace{1cm}
+    {\Large\textcolor{cyanlight}{Questions \& Discussion}}
+    
+    \vspace{1.5cm}
+    \begin{tikzpicture}
+      \foreach \i in {1,...,8} {
+        \fill[white,opacity=0.3] ({45*\i}:2) circle (0.15);
+        \draw[white,opacity=0.5,thick] ({45*\i}:1.5) -- ({45*\i}:2.5);
+      }
+      \node[circle,fill=white,minimum size=1.5cm,opacity=0.9] at (0,0) 
+        {\textcolor{cyandark}{\textbf{ACO}}};
+    \end{tikzpicture}
+    
+    \vspace{1cm}
+    {\large\textcolor{grisclair}{
+      \textbf{Optimisation Continue et Discrète}\\
+      UNSTIM — ENSGMM — 2025-2026
+    }}
+  \end{center}
+\end{frame}
+
+% ====== SLIDE BONUS : ALGORITHME DÉTAILLÉ ======
+\begin{frame}[fragile,allowframebreaks]{Annexe : Algorithme Détaillé}
+  \begin{algorithmic}[1]
+    \State \textbf{Initialisation}
+    \State $\tau_{ij} \leftarrow \tau_{max}$ pour tout $(i,j)$ compatible
+    \State $S_{best} \leftarrow \emptyset$, $f_{best} \leftarrow +\infty$
+    \State
+    \While{non convergence}
+      \State $S_{best\_cycle} \leftarrow \emptyset$
+      \For{$ant = 1$ à $m$}
+        \State $S^{ant} \leftarrow \emptyset$
+        \State $C_{restantes} \leftarrow C$
+        \While{$C_{restantes} \neq \emptyset$}
+          \State Sélectionner $c_i \in C_{restantes}$
+          \State $N_i \leftarrow$ salles compatibles pour $c_i$
+          \For{chaque $r_j \in N_i$}
+            \State Calculer $\eta^{cap}_{ij}$, $\eta^{conf}_{ij}$, $\eta^{load}_{ij}$
+            \State $\eta_{ij} \leftarrow \eta^{cap}_{ij} \cdot (\eta^{conf}_{ij})^2 \cdot \eta^{load}_{ij}$
+          \EndFor
+          \State Calculer $p^{ant}_{ij}$ pour tout $j \in N_i$
+          \State Sélectionner $r_{j^*}$ par roulette selon $p^{ant}_{ij}$
+          \State $S^{ant} \leftarrow S^{ant} \cup \{(c_i, r_{j^*})\}$
+          \State $C_{restantes} \leftarrow C_{restantes} \setminus \{c_i\}$
+        \EndWhile
+        \State Évaluer $f(S^{ant})$
+        \If{$f(S^{ant}) < f_{best}$}
+          \State $S_{best} \leftarrow S^{ant}$
+        \EndIf
+      \EndFor
+      \State \textcolor{violetdeep}{\textbf{Mise à jour phéromones}}
+      \For{tout $(i,j)$}
+        \State $\tau_{ij} \leftarrow (1-\rho) \cdot \tau_{ij}$ \Comment{Évaporation}
+      \EndFor
+      \For{$(c_i, r_j) \in S_{best}$}
+        \State $\tau_{ij} \leftarrow \tau_{ij} + Q/f(S_{best})$ \Comment{Dépôt}
+      \EndFor
+      \State Appliquer bornes MAX-MIN
+    \EndWhile
+    \State \Return $S_{best}$
+  \end{algorithmic}
+\end{frame}
+
+\end{document}

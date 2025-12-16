@@ -1,0 +1,41 @@
+Jour,Période,Salle,Capacite_Salle,Classe,Matiere,Effectif_Classe,Slot_ID,Tache_ID
+J,Aprem,TD-1,30,GMM-I3,Alg. Lin. III,23,TD-1_J_Aprem,GMM-I3_Alg._Lin._III
+J,Aprem,TD-2,30,GEP-I1,Chim. Proc. I,27,TD-2_J_Aprem,GEP-I1_Chim._Proc._I
+J,Aprem,TD-2,30,GEP-I3,Én. Ren. III,20,TD-2_J_Aprem,GEP-I3_Én._Ren._III
+J,Aprem,TD-3,30,GMM-I2,Cal. Sci. II,25,TD-3_J_Aprem,GMM-I2_Cal._Sci._II
+J,Aprem,TD-4,30,GEP-I2,Én. Ren. II,20,TD-4_J_Aprem,GEP-I2_Én._Ren._II
+J,Matin,AMPHI-100,100,ENSTP-L1,Phys I,75,AMPHI-100_J_Matin,ENSTP-L1_Phys_I
+J,Matin,TD-1,30,GEP-I2,Inst. II,20,TD-1_J_Matin,GEP-I2_Inst._II
+J,Matin,TD-2,30,GMM-I3,Cal. Sci. III,23,TD-2_J_Matin,GMM-I3_Cal._Sci._III
+J,Matin,TD-2,30,GEP-I3,Thermo. App. III,20,TD-2_J_Matin,GEP-I3_Thermo._App._III
+J,Matin,TD-4,30,GEP-I1,Én. Ren. I,27,TD-4_J_Matin,GEP-I1_Én._Ren._I
+L,Aprem,AMPHI-100,100,ENSTP-L1,Topo I,75,AMPHI-100_L_Aprem,ENSTP-L1_Topo_I
+L,Aprem,TD-3,30,GMM-I1,Alg. Lin. I,27,TD-3_L_Aprem,GMM-I1_Alg._Lin._I
+L,Aprem,TD-3,30,GMM-I3,Opt. Dis. III,23,TD-3_L_Aprem,GMM-I3_Opt._Dis._III
+L,Matin,AMPHI-100,100,ENSTP-L1,DI I,75,AMPHI-100_L_Matin,ENSTP-L1_DI_I
+L,Matin,SALLE-60,60,ENSTP-L3,Urbanisme,55,SALLE-60_L_Matin,ENSTP-L3_Urbanisme
+L,Matin,TD-1,30,GMM-I1,Mod. Stoch. I,27,TD-1_L_Matin,GMM-I1_Mod._Stoch._I
+L,Matin,TD-1,30,GMM-I3,Mod. Stoch. III,23,TD-1_L_Matin,GMM-I3_Mod._Stoch._III
+L,Matin,TD-2,30,GMM-I2,Mod. Stoch. II,25,TD-2_L_Matin,GMM-I2_Mod._Stoch._II
+L,Matin,TD-4,30,GEP-I1,Trans. Chal. I,27,TD-4_L_Matin,GEP-I1_Trans._Chal._I
+Ma,Aprem,AMPHI-100,100,ENSTP-L1,Maths I,75,AMPHI-100_Ma_Aprem,ENSTP-L1_Maths_I
+Ma,Matin,SALLE-60,60,ENSTP-L3,Projet Construction,55,SALLE-60_Ma_Matin,ENSTP-L3_Projet_Construction
+Ma,Matin,TD-1,30,GMM-I1,Opt. Dis. I,27,TD-1_Ma_Matin,GMM-I1_Opt._Dis._I
+Ma,Matin,TD-4,30,GEP-I2,Trans. Chal. II,20,TD-4_Ma_Matin,GEP-I2_Trans._Chal._II
+Me,Aprem,TD-3,30,GEP-I2,Chim. Proc. II,20,TD-3_Me_Aprem,GEP-I2_Chim._Proc._II
+Me,Aprem,TD-4,30,GMM-I1,Cal. Sci. I,27,TD-4_Me_Aprem,GMM-I1_Cal._Sci._I
+Me,Matin,SALLE-60,60,ENSTP-L3,Phys III,55,SALLE-60_Me_Matin,ENSTP-L3_Phys_III
+Me,Matin,TD-2,30,GEP-I3,Chim. Proc. III,20,TD-2_Me_Matin,GEP-I3_Chim._Proc._III
+Me,Matin,TD-4,30,GEP-I2,Thermo. App. II,20,TD-4_Me_Matin,GEP-I2_Thermo._App._II
+S,Aprem,SALLE-60,60,ENSTP-L3,RDM III,55,SALLE-60_S_Aprem,ENSTP-L3_RDM_III
+S,Aprem,TD-1,30,GMM-I2,Opt. Dis. II,25,TD-1_S_Aprem,GMM-I2_Opt._Dis._II
+S,Aprem,TD-2,30,GMM-I1,Anal. Fonc. I,27,TD-2_S_Aprem,GMM-I1_Anal._Fonc._I
+S,Aprem,TD-3,30,GEP-I3,Trans. Chal. III,20,TD-3_S_Aprem,GEP-I3_Trans._Chal._III
+S,Matin,TD-3,30,GEP-I3,Inst. III,20,TD-3_S_Matin,GEP-I3_Inst._III
+V,Aprem,AMPHI-100,100,ENSTP-L1,RDM I,75,AMPHI-100_V_Aprem,ENSTP-L1_RDM_I
+V,Aprem,SALLE-60,60,ENSTP-L3,Maths III,55,SALLE-60_V_Aprem,ENSTP-L3_Maths_III
+V,Aprem,TD-2,30,GMM-I3,Anal. Fonc. III,23,TD-2_V_Aprem,GMM-I3_Anal._Fonc._III
+V,Aprem,TD-3,30,GEP-I1,Inst. I,27,TD-3_V_Aprem,GEP-I1_Inst._I
+V,Aprem,TD-3,30,GMM-I2,Anal. Fonc. II,25,TD-3_V_Aprem,GMM-I2_Anal._Fonc._II
+V,Matin,TD-1,30,GMM-I2,Alg. Lin. II,25,TD-1_V_Matin,GMM-I2_Alg._Lin._II
+V,Matin,TD-4,30,GEP-I1,Thermo. App. I,27,TD-4_V_Matin,GEP-I1_Thermo._App._I

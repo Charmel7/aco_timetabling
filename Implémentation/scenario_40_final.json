@@ -1,0 +1,90 @@
+{
+    "DESCRIPTION": "Scénario de base du Campus de Sogbo-Aliho : 10 classes, 40 tâches (4 cours/classe), 7 salles, 84 slots.",
+
+    "ACO_PARAMS": {
+        "alpha": 1,         
+        "beta": 5,          
+        "rho": 0.01,        
+        "Q": 100,           
+        "tau_max": 6,       
+        "tau_min": 0.01,    
+        "w1": 1000,         
+        "w2": 1,            
+        "w3": 0.1,          
+        "m": 30,            
+        "MaxIterations": 150
+    },
+
+    "SALLES": {
+        "TD-1": [30, "TD"], 
+        "TD-2": [30, "TD"], 
+        "TD-3": [30, "TD"], 
+        "TD-4": [30, "TD"],
+        "SALLE-60": [60, "SC"],  
+        "AMPHI-100": [100, "AMPHI"], 
+        "AMPHI-200": [200, "AMPHI"]
+    },
+
+    "CLASSES_DETAILS": {
+        "ENSTP-L1": [75, [
+            "Mathématiques I", 
+            "Physique I", 
+            "RDM I", 
+            "Topographie I"
+        ]],
+        "ENSTP-L3": [55, [
+            "Mathématiques III", 
+            "Physique III", 
+            "RDM III", 
+            "Projet Construction"
+        ]],
+        "ENSTP-I1": [60, [
+            "Mécanique des Fluides",
+            "Géotechnique I",
+            "Matériaux de Construction",
+            "Hydraulique Générale"
+        ]],
+        "ENSTP-I3": [20, [
+            "Béton Armé",
+            "Charpente Métallique",
+            "Voiries et Réseaux",
+            "Gestion de Projet"
+        ]],
+        "GMM-I1": [27, [
+            "Analyse Fonctionnelle I", 
+            "Algèbre Linéaire I", 
+            "Modélisation Stochastique I", 
+            "Optimisation Discrète I"
+        ]],
+        "GMM-I2": [25, [
+            "Analyse Fonctionnelle II", 
+            "Algèbre Linéaire II", 
+            "Modélisation Stochastique II", 
+            "Optimisation Discrète II"
+        ]],
+        "GMM-I3": [23, [
+            "Analyse Fonctionnelle III", 
+            "Algèbre Linéaire III", 
+            "Modélisation Stochastique III", 
+            "Optimisation Discrète III"
+        ]],
+        "GEP-I1": [27, [
+            "Thermodynamique Appliquée I", 
+            "Transfert de Chaleur I", 
+            "Énergies Renouvelables I", 
+            "Chimie des Procédés I"
+        ]],
+        "GEP-I2": [20, [
+            "Thermodynamique Appliquée II", 
+            "Transfert de Chaleur II", 
+            "Énergies Renouvelables II", 
+            "Chimie des Procédés II"
+        ]],
+        "GEP-I3": [20, [
+            "Thermodynamique Appliquée III", 
+            "Transfert de Chaleur III", 
+            "Énergies Renouvelables III", 
+            "Chimie des Procédés III"
+        ]]
+    }
+}

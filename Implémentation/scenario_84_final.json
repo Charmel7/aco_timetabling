@@ -1,0 +1,136 @@
+{
+    "DESCRIPTION": "Scénario saturé du Campus de Sogbo-Aliho : 10 classes, 84 tâches, 7 salles, 84 slots (100% occupation).",
+
+    "ACO_PARAMS": {
+        "alpha": 1,         
+        "beta": 5,          
+        "rho": 0.02,        
+        "Q": 100,           
+        "tau_max": 6,       
+        "tau_min": 0.01,    
+        "w1": 1000,         
+        "w2": 1,            
+        "w3": 0.1,          
+        "m": 50,            
+        "MaxIterations": 300
+    },
+
+    "SALLES": {
+        "TD-1": [30, "TD"], 
+        "TD-2": [30, "TD"], 
+        "TD-3": [30, "TD"], 
+        "TD-4": [30, "TD"],
+        "SALLE-60": [60, "SC"],  
+        "AMPHI-100": [100, "AMPHI"], 
+        "AMPHI-200": [200, "AMPHI"]
+    },
+
+    "CLASSES_DETAILS": {
+        "ENSTP-L1": [75, [
+            "Mathématiques I", 
+            "Physique I", 
+            "RDM I", 
+            "Topographie I",
+            "Dessin Industriel I",
+            "Informatique Appliquée",
+            "Mécanique Appliquée",
+            "Chimie Générale"
+        ]],
+        "ENSTP-L3": [55, [
+            "Mathématiques III", 
+            "Physique III", 
+            "RDM III", 
+            "Projet Construction",
+            "Urbanisme",
+            "Droit de la Construction",
+            "Économie du BTP",
+            "Management de Projet"
+        ]],
+        "ENSTP-I1": [60, [
+            "Mécanique des Fluides",
+            "Géotechnique I",
+            "Matériaux de Construction",
+            "Hydraulique Générale",
+            "Béton Armé I",
+            "Topographie Avancée",
+            "Routes et Autoroutes",
+            "Ouvrages d'Art I",
+            "Résistance des Matériaux II"
+        ]],
+        "ENSTP-I3": [20, [
+            "Béton Armé",
+            "Charpente Métallique",
+            "Voiries et Réseaux",
+            "Gestion de Projet",
+            "Ponts et Viaducs",
+            "Barrages",
+            "Tunnels",
+            "Constructions Parasismiques",
+            "Réhabilitation"
+        ]],
+        "GMM-I1": [27, [
+            "Analyse Fonctionnelle I", 
+            "Algèbre Linéaire I", 
+            "Modélisation Stochastique I", 
+            "Optimisation Discrète I",
+            "Calcul Scientifique I",
+            "Probabilités Avancées",
+            "Statistiques Mathématiques",
+            "Programmation Python"
+        ]],
+        "GMM-I2": [25, [
+            "Analyse Fonctionnelle II", 
+            "Algèbre Linéaire II", 
+            "Modélisation Stochastique II", 
+            "Optimisation Discrète II",
+            "Calcul Scientifique II",
+            "Recherche Opérationnelle",
+            "Analyse de Données",
+            "Machine Learning",
+            "Optimisation Continue"
+        ]],
+        "GMM-I3": [23, [
+            "Analyse Fonctionnelle III", 
+            "Algèbre Linéaire III", 
+            "Modélisation Stochastique III", 
+            "Optimisation Discrète III",
+            "Calcul Scientifique III",
+            "Deep Learning",
+            "Théorie de l'Optimisation",
+            "Projet de Fin d'Études",
+            "Séminaire de Recherche"
+        ]],
+        "GEP-I1": [27, [
+            "Thermodynamique Appliquée I", 
+            "Transfert de Chaleur I", 
+            "Énergies Renouvelables I", 
+            "Chimie des Procédés I",
+            "Instrumentation I",
+            "Mécanique des Fluides Énergétiques",
+            "Électrotechnique",
+            "Physique des Matériaux"
+        ]],
+        "GEP-I2": [20, [
+            "Thermodynamique Appliquée II", 
+            "Transfert de Chaleur II", 
+            "Énergies Renouvelables II", 
+            "Chimie des Procédés II",
+            "Instrumentation II",
+            "Turbomachines",
+            "Centrales Thermiques",
+            "Systèmes Solaires",
+            "Biomasse et Bioénergie"
+        ]],
+        "GEP-I3": [20, [
+            "Thermodynamique Appliquée III", 
+            "Transfert de Chaleur III", 
+            "Énergies Renouvelables III", 
+            "Chimie des Procédés III",
+            "Instrumentation III",
+            "Énergie Éolienne",
+            "Géothermie",
+            "Stockage d'Énergie",
+            "Projet Énergétique"
+        ]]
+    }
+}
