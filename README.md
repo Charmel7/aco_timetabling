@@ -1,3 +1,71 @@
+# Optimisation des emplois du temps pour les groupes académiques à Sogbo Aliho
+
+## Présentation
+Ce dépôt explore l’optimisation des emplois du temps pour les groupes académiques de **Sogbo Aliho** en utilisant l’optimisation par colonies de fourmis (ACO).  
+Le projet combine documentation, code prototype, scénarios et expérimentations de visualisation afin de rendre le processus d’optimisation clair et collaboratif.
+
+---
+
+## Structure du dépôt
+```
+.
+├── aco_latex/              # Sources LaTeX (rapport de Prosper + diapositives Beamer de Laurinda)
+│
+├── implementation/         # Notebook et scénarios
+│   ├── aco_notebook.ipynb  # Implémentation en brouillon (contient des erreurs à corriger)
+│   ├── scenarios/          # Fichiers JSON décrivant les cas d’emplois du temps
+│   ├── outputs/            # Résultats, journaux, cartes thermiques, animations
+│
+└── README.md
+```
+
+---
+
+## Mise en route
+- Prérequis : Python 3.9+, Jupyter Notebook, distribution LaTeX  
+- Installer les dépendances avec `pip install numpy matplotlib seaborn`  
+- Ouvrir `implementation/aco_notebook.ipynb` et exécuter pas à pas  
+- Utiliser les scénarios JSON depuis `implementation/scenarios/` pour tester différents cas  
+
+---
+
+## Scénarios et résultats
+- **Scénarios :** Les fichiers JSON définissent les cours, les salles, les créneaux horaires et les contraintes.  
+- **Résultats :** Les sorties incluent des emplois du temps, des cartes thermiques de phéromones et des animations montrant la dynamique de l’algorithme.  
+
+---
+
+## Visualisation
+Les matrices de phéromones sont représentées sous forme de cartes thermiques et animées pour illustrer comment les fourmis renforcent les chemins pendant l’optimisation.  
+Ces visualisations rendent le processus d’apprentissage de l’algorithme plus facile à comprendre et plus attrayant.  
+
+---
+
+## Collaboration
+- Partager les mises à jour LaTeX dans `aco_latex`  
+- Déboguer et améliorer le notebook ensemble  
+- Utiliser des branches et des pull requests pour les contributions  
+- Garder les sorties organisées dans `implementation/aco_results`  
+
+---
+
+## Prochaines étapes
+- Corriger les erreurs dans l’implémentation du notebook  
+- Améliorer l’animation des phéromones pour plus de clarté et de reproductibilité  
+- Finaliser le rapport LaTeX et les diapositives Beamer pour la présentation  
+- Comparer les résultats d’optimisation avec des heuristiques de référence  
+
+---
+
+## Crédits
+- Contributeurs du projet : Prosper, Laurinda, Eskil et collaborateurs  
+- Brouillons assistés par des outils IA (Claude, Gemini, Copilot)  
+
+
+🐝 (oui c’est une abeille, pas une fourmi)  
+
+
+
 
 # Timetabling Optimization for Academic Groups in Sogbo Aliho
 
@@ -67,69 +135,5 @@ These visualizations make the algorithm’s learning process easier to understan
 
 
 
-# Optimisation des emplois du temps pour les groupes académiques à Sogbo Aliho
 
-## Présentation
-Ce dépôt explore l’optimisation des emplois du temps pour les groupes académiques de **Sogbo Aliho** en utilisant l’optimisation par colonies de fourmis (ACO).  
-Le projet combine documentation, code prototype, scénarios et expérimentations de visualisation afin de rendre le processus d’optimisation clair et collaboratif.
-
----
-
-## Structure du dépôt
-```
-.
-├── aco_latex/              # Sources LaTeX (rapport de Prosper + diapositives Beamer de Laurinda)
-│
-├── implementation/         # Notebook et scénarios
-│   ├── aco_notebook.ipynb  # Implémentation en brouillon (contient des erreurs à corriger)
-│   ├── scenarios/          # Fichiers JSON décrivant les cas d’emplois du temps
-│   ├── outputs/            # Résultats, journaux, cartes thermiques, animations
-│
-└── README.md
-```
-
----
-
-## Mise en route
-- Prérequis : Python 3.9+, Jupyter Notebook, distribution LaTeX  
-- Installer les dépendances avec `pip install numpy matplotlib seaborn`  
-- Ouvrir `implementation/aco_notebook.ipynb` et exécuter pas à pas  
-- Utiliser les scénarios JSON depuis `implementation/scenarios/` pour tester différents cas  
-
----
-
-## Scénarios et résultats
-- **Scénarios :** Les fichiers JSON définissent les cours, les salles, les créneaux horaires et les contraintes.  
-- **Résultats :** Les sorties incluent des emplois du temps, des cartes thermiques de phéromones et des animations montrant la dynamique de l’algorithme.  
-
----
-
-## Visualisation
-Les matrices de phéromones sont représentées sous forme de cartes thermiques et animées pour illustrer comment les fourmis renforcent les chemins pendant l’optimisation.  
-Ces visualisations rendent le processus d’apprentissage de l’algorithme plus facile à comprendre et plus attrayant.  
-
----
-
-## Collaboration
-- Partager les mises à jour LaTeX dans `aco_latex`  
-- Déboguer et améliorer le notebook ensemble  
-- Utiliser des branches et des pull requests pour les contributions  
-- Garder les sorties organisées dans `implementation/aco_results`  
-
----
-
-## Prochaines étapes
-- Corriger les erreurs dans l’implémentation du notebook  
-- Améliorer l’animation des phéromones pour plus de clarté et de reproductibilité  
-- Finaliser le rapport LaTeX et les diapositives Beamer pour la présentation  
-- Comparer les résultats d’optimisation avec des heuristiques de référence  
-
----
-
-## Crédits
-- Contributeurs du projet : Prosper, Laurinda et collaborateurs  
-- Brouillons assistés par des outils IA (Claude, Gemini, Copilot)  
-
-
-🐝 (oui c’est une abeille, pas une fourmi)  
 
