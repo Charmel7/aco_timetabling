@@ -1,4 +1,4 @@
-# Optimisation des emplois du temps pour les groupes académiques à Sogbo Aliho
+# Optimisation des emplois du temps pour les groupes académiques à Sogbo Aliho avec les algorithmes de colonie de fourmis
 
 ## Présentation
 Ce dépôt explore l’optimisation des emplois du temps pour les groupes académiques de **Sogbo Aliho** en utilisant l’optimisation par colonies de fourmis (ACO).  
