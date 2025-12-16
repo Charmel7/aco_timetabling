@@ -9,7 +9,7 @@ Le projet combine documentation, code prototype, scénarios et expérimentations
 ## Structure du dépôt
 ```
 .
-├── aco_latex/              # Sources LaTeX (rapport de Prosper + diapositives Beamer de Laurinda)
+├── aco_latex/              # Sources LaTeX (rapport  + diapositives Beamer de Laurinda)
 │
 ├── implementation/         # Notebook et scénarios
 │   ├── aco_notebook.ipynb  # Implémentation en brouillon (contient des erreurs à corriger)
