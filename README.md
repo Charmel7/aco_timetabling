@@ -1,3 +1,69 @@
+
+# Timetabling Optimization for Academic Groups 
+
+## Overview
+This repository explores timetabling optimization for academic groups in **Sogbo Aliho**,at Abomey University,Benin, using Ant Colony Optimization (ACO).  
+The project combines documentation, prototype code, scenarios, and visualization experiments to make the optimization process clear and collaborative.
+
+---
+
+## Repository Structure
+```
+.
+├── aco_latex/              # LaTeX sources (Prosper’s report + Laurinda’s Beamer slides)
+├── implementation/         # Notebook and scenarios
+│   ├── aco_notebook.ipynb  # Draft implementation (contains errors to fix)
+│   ├── scenarios/          # JSON files describing timetabling cases
+│   ├── outputs/            # Results, logs, heatmaps, animations
+│   
+└── README.md
+```
+
+---
+
+## Getting Started
+- Requirements: Python 3.9+, Jupyter Notebook, LaTeX distribution  
+- Install dependencies with `pip install numpy matplotlib seaborn`  
+- Open `implementation/aco_notebook.ipynb` and run step by step  
+- Use JSON scenarios from `implementation/scenarios/` to test different cases  
+
+---
+
+## Scenarios and Outputs
+- **Scenarios:** JSON files define courses, rooms, timeslots, and constraints.  
+- **Outputs:** Results include timetables, pheromone heatmaps, and animations showing algorithm dynamics.  
+
+---
+
+## Visualization
+Pheromone matrices are represented as heatmaps and animated to illustrate how ants reinforce paths during optimization.  
+These visualizations make the algorithm’s learning process easier to understand and more engaging.  
+
+---
+
+## Collaboration
+- Share LaTeX updates in `aco_latex`  
+- Debug and refine the notebook together  
+- Use branches and pull requests for contributions  
+- Keep outputs organized in `implementation/aco_results`  
+
+---
+
+## Next Steps
+- Fix errors in the notebook implementation  
+- Improve pheromone animation for clarity and reproducibility  
+- Finalize LaTeX report and Beamer slides for presentation  
+- Benchmark timetabling results against baseline heuristics  
+
+---
+
+## Credits
+- Project contributors: Prosper, Laurinda, and collaborators  
+- Drafts assisted by AI tools (Claude, Gemini, Copilot)  
+  
+🐝(yeah this is a bee not an ant)
+
+
 # Optimisation des emplois du temps pour les groupes académiques à Sogbo Aliho avec les algorithmes de colonie de fourmis
 
 ## Présentation
@@ -67,70 +133,6 @@ Ces visualisations rendent le processus d’apprentissage de l’algorithme plus
 
 
 
-# Timetabling Optimization for Academic Groups in Sogbo Aliho
-
-## Overview
-This repository explores timetabling optimization for academic groups in **Sogbo Aliho** using Ant Colony Optimization (ACO).  
-The project combines documentation, prototype code, scenarios, and visualization experiments to make the optimization process clear and collaborative.
-
----
-
-## Repository Structure
-```
-.
-├── aco_latex/              # LaTeX sources (Prosper’s report + Laurinda’s Beamer slides)
-│
-├── implementation/         # Notebook and scenarios
-│   ├── aco_notebook.ipynb  # Draft implementation (contains errors to fix)
-│   ├── scenarios/          # JSON files describing timetabling cases
-│   ├── outputs/            # Results, logs, heatmaps, animations
-│
-└── README.md
-```
-
----
-
-## Getting Started
-- Requirements: Python 3.9+, Jupyter Notebook, LaTeX distribution  
-- Install dependencies with `pip install numpy matplotlib seaborn`  
-- Open `implementation/aco_notebook.ipynb` and run step by step  
-- Use JSON scenarios from `implementation/scenarios/` to test different cases  
-
----
-
-## Scenarios and Outputs
-- **Scenarios:** JSON files define courses, rooms, timeslots, and constraints.  
-- **Outputs:** Results include timetables, pheromone heatmaps, and animations showing algorithm dynamics.  
-
----
-
-## Visualization
-Pheromone matrices are represented as heatmaps and animated to illustrate how ants reinforce paths during optimization.  
-These visualizations make the algorithm’s learning process easier to understand and more engaging.  
-
----
-
-## Collaboration
-- Share LaTeX updates in `aco_latex`  
-- Debug and refine the notebook together  
-- Use branches and pull requests for contributions  
-- Keep outputs organized in `implementation/aco_results`  
-
----
-
-## Next Steps
-- Fix errors in the notebook implementation  
-- Improve pheromone animation for clarity and reproducibility  
-- Finalize LaTeX report and Beamer slides for presentation  
-- Benchmark timetabling results against baseline heuristics  
-
----
-
-## Credits
-- Project contributors: Prosper, Laurinda, and collaborators  
-- Drafts assisted by AI tools (Claude, Gemini, Copilot)  
-  
-🐝(yeah this is a bee not an ant)
 
 
 
